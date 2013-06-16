@@ -1,5 +1,6 @@
 ---
-Title: Authorization Logic
+title: Authorization Logic
+author: Andrew K. Hirsch
 ---
 
 Authorization logics are logics for describing authorization in (distributed) computing systems.
