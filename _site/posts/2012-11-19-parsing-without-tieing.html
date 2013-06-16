@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Andrew Hirsch: Language and Logic - Parsing Without Tying the Recursive Knot</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Andrew Hirsch: Language and Logic</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+                <a href="../research.html">Research</a>
+                <a href="../tripreports.html">Trips</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Parsing Without Tying the Recursive Knot</h1>
+
+            <div class="info">
+    Posted on November 19, 2012
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>I’m continuing in my exploration of fully-functional extensible parsing. In particular, I’ve spent some time diving in to the Parser monad from Parsec 2, and I’ve defined the problem I’ve been having.</p>
+<p>If you’ve ever taken a look at <em>Data Types a la Carte</em> by Wouter Sweirstra, then you know that it defines /Terms/ as follows:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- Term f :: (* -&gt; *) -&gt; *</span>
+<span class="kw">data</span> <span class="dt">Term</span> f <span class="fu">=</span> f (<span class="dt">Term</span> f)</code></pre>
+<p>In other words, <code>Term</code> calculates the fixed point of the functor <code>f</code>. Sweirstra refers to this as “tying the recursive knot”. The secret to the paper, is to give ADTs as sums of functors (where the sum of two functors is a functor), then tie the recursive know over the entire structure. The sum of two functors is given as</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> f <span class="fu">:+:</span> g <span class="fu">=</span> inl f
+             <span class="fu">|</span> inr g
+
+<span class="kw">instance</span> (<span class="kw">Functor</span> f, <span class="kw">Functor</span> g) <span class="ot">=&gt;</span> <span class="kw">Functor</span> f <span class="fu">:+:</span> g <span class="kw">where</span>
+  <span class="fu">fmap</span> (inl f) e <span class="fu">=</span> inl (<span class="fu">fmap</span> f e)
+  <span class="fu">fmap</span> (inr g) e <span class="fu">=</span> inr (<span class="fu">fmap</span> g e)</code></pre>
+<p>The difficulty comes when parsing. In particular, we need to parse into some closed datatype. In particular, you can think of the “untied” ADTs as not having a shape, and tying the knot as giving them shape. Parsing gives a shape to some text as data, and thus it needs some shaped data structure to parse into. However, if we give a shape to the data structure, then we cannot then add more pieces to it.</p>
+<p>Then, the question becomes, can we parse into an unshaped data structure? It’s easy enough to imagine a parser for the <code>Add</code> functor:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">   <span class="dt">ParseAdd</span><span class="ot"> ::</span> <span class="dt">Parser</span> e <span class="ot">-&gt;</span> <span class="dt">Parser</span> (<span class="dt">Add</span> e)
+   <span class="dt">ParseAdd</span> p <span class="fu">=</span> <span class="kw">do</span>
+     char <span class="ch">'+'</span>
+     spaces
+     s1 <span class="ot">&lt;-</span> p
+     spaces
+     s2 <span class="ot">&lt;-</span> p
+     spaces
+     <span class="fu">return</span> <span class="fu">$</span> <span class="dt">Add</span> s1 s2</code></pre>
+<p>Then, the question becomes, can we define a parser for <code>Term Add</code> using this parser for <code>Add e</code>? One can imagine it might look something like</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"> <span class="dt">AddParser</span><span class="ot"> ::</span> <span class="dt">Parser</span> (<span class="dt">Term</span> <span class="dt">Add</span>)
+ <span class="dt">AddParser</span> <span class="fu">=</span> fix <span class="dt">ParseAdd</span></code></pre>
+<p>However, this would give an error: <code>fix</code> has the type <code>(a -&gt; a) -&gt; a</code>, however, <code>Parser e</code> obviously does not equal <code>Parser (Add e)</code>. What can we do then?</p>
+<p>It is this question that I’m currently working on.</p>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

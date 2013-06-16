@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Andrew Hirsch: Language and Logic - Fully Functional Extensible Parsers</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Andrew Hirsch: Language and Logic</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+                <a href="../research.html">Research</a>
+                <a href="../tripreports.html">Trips</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Fully Functional Extensible Parsers</h1>
+
+            <div class="info">
+    Posted on November  8, 2012
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>For my senior design project, I have taken over a code base known as Pony. Pony is a compiler; but there’s a twist: Pony doesn’t compile a single language, rather it compiles <em>to</em> a single language: ANSI C. The idea is that Pony would, by default, compile ANSI C to ANSI C, but allow users to specify additions and changes to C, and compile those back into C itself. Pony should also allow users to specify how to compile a completely different language, say scheme, into C.</p>
+<p>Two years ago, Patrick Thompson (now of Apple Computers), created Pony and defined how transformations into C could be written. He has also written a parser for ANSI C, with the possibility of adding in new operators. The problem comes when more complex syntactic transformations need to take place: for example when we want to add class-based objects to C. For this, we need some form of extensible compiler.</p>
+<p>For various reasons (not excluding preferences, but including ease of verification), Pony is entirely written in Haskell. After some searching, my professor and I have not discovered anybody who claims to have written an extensible parser in Haskell. So, this has become the first job of my senior design.</p>
+<p>We have decided to make the Abstract Syntax Trees that we parse into composable, using the <a href="http://hackage.haskell.org/package/compdata">Compdata library</a>. This allows us to extend the AST in exactly the way that we want. Now, we simply have to write a parser for these trees.</p>
+<p>There are generally two standard ways to write parsers in Haskell: <a href="http://www.haskell.org/happy/">Happy</a>, which is a standard parser generator like yacc; and <a href="http://www.haskell.org/haskellwiki/Parsec">Parsec</a>, which is a parser combinator library. Since we want to build things on the fly, Parsec seemed the obvious choice.</p>
+<p>The first attempt at a parser seemed to go well. We were able to write a simple calculator, with AST <code>Sig</code>, and an extension, with AST <code>Sig'</code>. Then, we were able to write a parser for <code>Term Sig</code> rather easily, and then we were able to write a parser for <code>Term Sig'</code> as follows:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Sig'Parser</span><span class="ot"> ::</span> <span class="dt">Parser</span> (<span class="dt">Term</span> <span class="dt">Sig'</span>)  
+<span class="dt">Sig'Parser</span> <span class="fu">=</span> <span class="dt">MultParser</span> <span class="fu">&lt;|&gt;</span> <span class="kw">do</span>  
+  sig <span class="ot">&lt;-</span> <span class="dt">SigParser</span>  
+  <span class="fu">return</span> <span class="fu">$</span> deepInject2 sig  </code></pre>
+<p>Where <code>SigParser</code> was the parser for <code>Term Sig</code> and <code>MultParser</code> was the parser for the extension.</p>
+<p>Perhaps, you can already see the problem here. We did not at first, as it compiled and ran fine on the input we were giving it. We gave it the input “* + 3 2 4”, because the parser was pre-order. In this case it worked perfectly, but then we gave it slightly different input: “+ * 3 2 4”. The result?</p>
+<p>No parse.</p>
+<p>To see why this is, you must look at the definition of <code>Sig'Parser</code>. Since we are parsing something that is not a multiplication, it must be something of type <code>Sig</code>. Since <code>Sig</code> only knows how to add, the <code>Sig</code> parser choked when given something that had a multiplaction symbol.</p>
+<p>Now, I am playing with solutions to this problem. I think that the solution is going to be to go into the Parsec monad and see if we can build something that is compositional within the monad. This will probably spawn more posts as I work on it. However, even in the case where that doesn’t happen, we still have the step-aside solution of Template Haskell.</p>
+<p>Long story short, programming fully functional extensible parsers is not easy.</p>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

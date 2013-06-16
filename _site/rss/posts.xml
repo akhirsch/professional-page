@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Andrew Hirsch: Language and Logic: Posts</title>
+        <link>http://akhirsch.github.io/</link>
+        <description><![CDATA[Posts from Andrew K. Hirsch's professional blog]]></description>
+        <atom:link href="http://akhirsch.github.io//rss/posts.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Sat, 15 Jun 2013 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>Sigma Calculus</title>
+    <link>http://akhirsch.github.io//posts/2013-06-15-sigma-calculus.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on June 15, 2013
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>I’ve recently gotten my hands on Abadi and Cardelli’s “A Theory of Objects”. In it, they produce an interesting calculus for object-oriented languages. I give a haskell version, below. This post is literate haskell. Get it <a href="/posts/2013-06-15-sigma-calculus.lhs">here</a>.</p>
+<p>I’m going to start out with some general haskell boilerplate.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">module</span> <span class="dt">Sigma</span> <span class="kw">where</span> 
+<span class="ot">&gt;</span>  
+<span class="ot">&gt;</span>   <span class="kw">import</span> Data.List
+<span class="ot">&gt;</span>   <span class="kw">import</span> Data.Char</code></pre>
+<p>Now, we’re going to define variables and labels. We define both to be just strings, this makes for easier printing later. We also define <code>Show</code> instances for both of these, for the same reason.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">Var</span> <span class="fu">=</span> <span class="dt">Var</span> <span class="dt">String</span>
+<span class="ot">&gt;</span>           <span class="kw">deriving</span> <span class="kw">Eq</span>
+<span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">Label</span> <span class="fu">=</span> <span class="dt">Label</span> <span class="dt">String</span>
+<span class="ot">&gt;</span>               <span class="kw">deriving</span> <span class="kw">Eq</span>
+<span class="ot">&gt;</span>  
+<span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">Var</span> <span class="kw">where</span>
+<span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Var</span> s) <span class="fu">=</span> s
+<span class="ot">&gt;</span>    
+<span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">Label</span> <span class="kw">where</span>
+<span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Label</span> s) <span class="fu">=</span> s</code></pre>
+<p>A method, much like a function in the lambda-calculus, is something with a variable and a term in which that variable may be free. The difference is, that we expect that a method is provided the object in which it resides as an argument. That is, the heart of object orientation, from Abadi and Cardelli’s point of view, is <em>self-application</em>.</p>
+<p>We write this similarly to a lambda function as well, except we use ς instead. This is the Greek letter sigma, in final word form.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">Method</span> <span class="fu">=</span> <span class="dt">Method</span> <span class="dt">Var</span> <span class="dt">SigmaTerm</span>
+<span class="ot">&gt;</span>              <span class="kw">deriving</span> <span class="kw">Eq</span>
+<span class="ot">&gt;</span>  
+<span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">Method</span> <span class="kw">where</span>
+<span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Method</span> v a) <span class="fu">=</span> <span class="st">&quot;ς(&quot;</span> <span class="fu">++</span> <span class="fu">show</span> v <span class="fu">++</span> <span class="st">&quot;)&quot;</span> <span class="fu">++</span> <span class="fu">show</span> a</code></pre>
+<p>Now, a Sigma term can be one of 4 things.</p>
+<p>First, it can be a variable.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">SigmaTerm</span> <span class="fu">=</span> <span class="dt">SigmaVar</span> <span class="dt">Var</span></code></pre>
+<p>Secondly, it can be an object. We view objects as a listing of methods, with labels for those methods.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="fu">|</span> <span class="dt">Object</span> [(<span class="dt">Label</span>, <span class="dt">Method</span>)]</code></pre>
+<p>We can call methods by providing the label.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="fu">|</span> <span class="dt">MethodCall</span> <span class="dt">SigmaTerm</span> <span class="dt">Label</span></code></pre>
+<p>Finally, we can replace a method with another. Again, we note the method with its label.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="fu">|</span> <span class="dt">Replacement</span> <span class="dt">SigmaTerm</span> <span class="dt">Label</span> <span class="dt">Method</span></code></pre>
+<p>We derive an Eq form for convinience sake.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="kw">deriving</span> <span class="kw">Eq</span></code></pre>
+<p>To write terms, we do things in much the same way as is common in object oriented languages in the wild. The difference is in replacement, which doesn’t have a standard way of doing things, and objects themselves, which are usually not written in languages in the wild.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">SigmaTerm</span> <span class="kw">where</span></code></pre>
+<p>Variables are written just as strings.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">SigmaVar</span> v) <span class="fu">=</span> <span class="fu">show</span> v</code></pre>
+<p>Objects are written in list format. We write <code>l = m</code> for a method <code>m</code> with label <code>l</code>.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Object</span> ms) <span class="fu">=</span> <span class="st">&quot;[&quot;</span> <span class="fu">++</span> (<span class="fu">concat</span> <span class="fu">$</span> 
+<span class="ot">&gt;</span>                               (intersperse <span class="st">&quot;,&quot;</span> 
+<span class="ot">&gt;</span>                               (<span class="fu">map</span> (\(l,m) <span class="ot">-&gt;</span> <span class="fu">show</span> l <span class="fu">++</span> <span class="st">&quot;=&quot;</span> <span class="fu">++</span> <span class="fu">show</span> m) ms))) 
+<span class="ot">&gt;</span>                           <span class="fu">++</span> <span class="st">&quot;]&quot;</span></code></pre>
+<p>We write method calls with the standard <code>.</code> syntax. Since replacements are visually complicated, we wrap them in parentheses.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">MethodCall</span> a l) <span class="fu">=</span> (show&#39; a) <span class="fu">++</span> <span class="st">&quot;.&quot;</span> <span class="fu">++</span> (<span class="fu">show</span> l)
+<span class="ot">&gt;</span>      <span class="kw">where</span> show&#39; a&#39;<span class="fu">@</span>(<span class="dt">Replacement</span> _ _ _) <span class="fu">=</span> <span class="st">&quot;(&quot;</span> <span class="fu">++</span> <span class="fu">show</span> a&#39; <span class="fu">++</span> <span class="st">&quot;)&quot;</span>
+<span class="ot">&gt;</span>            show&#39; a&#39; <span class="fu">=</span> <span class="fu">show</span> a&#39;</code></pre>
+<p>Replacements are written with the form <code>a.l⇐m</code>, where <code>a</code> is an object, <code>l</code> is a label, and <code>m</code> is a method.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Replacement</span> a l m) <span class="fu">=</span> (<span class="fu">show</span> a) <span class="fu">++</span> <span class="st">&quot;.&quot;</span> <span class="fu">++</span> (<span class="fu">show</span> l) <span class="fu">++</span> <span class="st">&quot;⇐&quot;</span> <span class="fu">++</span> (<span class="fu">show</span> m)</code></pre>
+<p>We now look at determining free variables. We have to use two functions because we seperated methods from terms; this is going to be a common theme in this post.</p>
+<p>We remove all instances of the variable <code>v</code> from the free variables in a method. This makes sense, since the method binds <code>v</code>. The way we determine free variables for terms is obvious.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;  freeVariablesInMethod ::</span> <span class="dt">Method</span> <span class="ot">-&gt;</span> [<span class="dt">Var</span>]
+<span class="ot">&gt;</span>  freeVariablesInMethod (<span class="dt">Method</span> v st) <span class="fu">=</span> delete v (nub <span class="fu">.</span> freeVariables <span class="fu">$</span> st)
+<span class="ot">&gt;</span>                   
+<span class="ot">&gt;  freeVariables ::</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> [<span class="dt">Var</span>]
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">SigmaVar</span> v) <span class="fu">=</span> [v]
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">Object</span> l) <span class="fu">=</span> <span class="fu">concatMap</span> (\(_,m) <span class="ot">-&gt;</span> freeVariablesInMethod m) l
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">MethodCall</span> a _) <span class="fu">=</span> freeVariables a
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">Replacement</span> a _ m) <span class="fu">=</span> (freeVariables a) <span class="fu">++</span> (freeVariablesInMethod m)</code></pre>
+<p>We define the semantics of our calculus via a function outcome. This is rather obvious, especially the first two terms. Note that it is possible to write failing terms, which we represent by the use of <code>Maybe</code>.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;  outcome ::</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">SigmaTerm</span>
+<span class="ot">&gt;</span>  outcome (<span class="dt">SigmaVar</span> v) <span class="fu">=</span> <span class="kw">Just</span> (<span class="dt">SigmaVar</span> v)
+<span class="ot">&gt;</span>  outcome (<span class="dt">Object</span> l) <span class="fu">=</span> <span class="kw">Just</span> (<span class="dt">Object</span> l)</code></pre>
+<p>A method call looks up the method that is being called. Then, it performs something similar to the standard β-reduction from lambda calculus. However, it provides the method with the object in which it is obtained. This is the self-application I talked about earlier. It’s also where we model dynamic dispatch in the calculus.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  outcome (<span class="dt">MethodCall</span> a l) <span class="fu">=</span> <span class="kw">let</span> o <span class="fu">=</span> outcome a <span class="kw">in</span>
+<span class="ot">&gt;</span>    <span class="kw">case</span> o <span class="kw">of</span>
+<span class="ot">&gt;</span>      <span class="kw">Just</span> (<span class="dt">Object</span> ms) <span class="ot">-&gt;</span> <span class="kw">case</span> <span class="fu">lookup</span> l ms <span class="kw">of</span>
+<span class="ot">&gt;</span>        <span class="kw">Just</span> (<span class="dt">Method</span> v m) <span class="ot">-&gt;</span> <span class="kw">Just</span> (subst m v (<span class="dt">Object</span> ms))
+<span class="ot">&gt;</span>        <span class="kw">Nothing</span> <span class="ot">-&gt;</span> <span class="kw">Nothing</span>
+<span class="ot">&gt;</span>      _ <span class="ot">-&gt;</span> <span class="kw">Nothing</span></code></pre>
+<p>Replacement simply does functional replacement on methods. That is, it looks up the label in the object, and creates a new object with the new method bound to that label.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  outcome (<span class="dt">Replacement</span> a l m) <span class="fu">=</span> <span class="kw">let</span> o <span class="fu">=</span> outcome a <span class="kw">in</span> 
+<span class="ot">&gt;</span>    <span class="kw">case</span> o <span class="kw">of</span>
+<span class="ot">&gt;</span>      <span class="kw">Just</span> (<span class="dt">Object</span> ms) <span class="ot">-&gt;</span> <span class="kw">Just</span> <span class="fu">.</span> <span class="dt">Object</span> <span class="fu">$</span> <span class="fu">map</span> (\(li,mi) <span class="ot">-&gt;</span> <span class="kw">if</span> li <span class="fu">==</span> l
+<span class="ot">&gt;</span>                                                           <span class="kw">then</span> (li, m)
+<span class="ot">&gt;</span>                                                           <span class="kw">else</span> (li, mi)) ms
+<span class="ot">&gt;</span>      _ <span class="ot">-&gt;</span> <span class="kw">Nothing</span></code></pre>
+<p>Note that this requires the notion of subsitution. However, the notion of subsitution here is rather uninspiring to a student of the lambda calculus. I give the definition here for the code, and for interested parties to study.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;  substInMethod ::</span> <span class="dt">Method</span> <span class="ot">-&gt;</span> <span class="dt">Var</span> <span class="ot">-&gt;</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">Method</span>
+<span class="ot">&gt;</span>  substInMethod (<span class="dt">Method</span> v st) v1 a <span class="fu">=</span> <span class="kw">if</span> v <span class="fu">==</span> v1 
+<span class="ot">&gt;</span>                               <span class="kw">then</span> <span class="kw">let</span> v&#39; <span class="fu">=</span> <span class="dt">Var</span> [
+<span class="ot">&gt;</span>                                              (<span class="fu">chr</span> <span class="fu">.</span> <span class="fu">sum</span> <span class="fu">.</span> (<span class="fu">concatMap</span> 
+<span class="ot">&gt;</span>                                                            (\(<span class="dt">Var</span> v&#39;&#39;) <span class="ot">-&gt;</span> <span class="fu">map</span> <span class="fu">ord</span> v&#39;&#39;)) 
+<span class="ot">&gt;</span>                                           <span class="fu">$</span> freeVariablesInMethod (<span class="dt">Method</span> v st))]
+<span class="ot">&gt;</span>                                    <span class="kw">in</span> 
+<span class="ot">&gt;</span>                                     <span class="dt">Method</span> v&#39; (subst (subst st v (<span class="dt">SigmaVar</span> v&#39;)) v1 a)
+<span class="ot">&gt;</span>                               <span class="kw">else</span> <span class="dt">Method</span> v (subst st v1 a)
+<span class="ot">&gt;</span>                                    
+<span class="ot">&gt;  subst ::</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">Var</span> <span class="ot">-&gt;</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">SigmaTerm</span>
+<span class="ot">&gt;</span>  subst (<span class="dt">SigmaVar</span> v) v&#39; a <span class="fu">=</span> <span class="kw">if</span> v <span class="fu">==</span> v&#39; <span class="kw">then</span> a <span class="kw">else</span> <span class="dt">SigmaVar</span> v
+<span class="ot">&gt;</span>  subst (<span class="dt">Object</span> l) v a <span class="fu">=</span> <span class="dt">Object</span> <span class="fu">$</span> <span class="fu">map</span> (\(label, m) <span class="ot">-&gt;</span> (label, substInMethod m v a)) l
+<span class="ot">&gt;</span>  subst (<span class="dt">MethodCall</span> a l) v b <span class="fu">=</span> <span class="dt">MethodCall</span> (subst a v b) l
+<span class="ot">&gt;</span>  subst (<span class="dt">Replacement</span> a l m) v b <span class="fu">=</span> <span class="dt">Replacement</span> (subst a v b) l (substInMethod m v a)</code></pre>
+<p>I hope that you will see me posting more on this calculus in the near future.<br />In particular, I want to continue to explore its semantics and its relationship with the lambda calculus. I also want to explore how it models object systems in the wild. My facts will probably either (a) not be research-level material, such as this haskell implementation, or (b) come straight from Abadi &amp; Cardelli. I highly recommend looking up the details if you are interested.</p>
+]]></description>
+    <pubDate>Sat, 15 Jun 2013 00:00:00 UT</pubDate>
+    <guid>http://akhirsch.github.io//posts/2013-06-15-sigma-calculus.html</guid>
+</item>
+<item>
+    <title>On Pony</title>
+    <link>http://akhirsch.github.io//posts/2013-06-15-on-pony.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on June 15, 2013
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>With the school year over, I’ve been working on updating this website. In particular, I’ve been working on updating to Hakyll 4. Previously, it was written in Hakyll 3. However, in doing so, I’ve been updating the blog posts I’ve posted previously to literate haskell. This has come to make me realize that I posted several posts on work I was doing on the Pony compiler, and that I never posted about what conclusions those came to.</p>
+<p>Pony, for the uninitiated (i.e. those that didn’t read my last posts, as the rest of the initiated consist pretty much exclusively of the 4 people who have done work on Pony), is an augmented C to ANSI C compiler. Pony allows programmers to write, in haskell, a program for transforming abstract syntax trees (ASTs). This means that we can write Domain Specific Languages (DSLs) into C, or write compilers for other languages into C.</p>
+<p>However, as I’ve noted in previous posts, writing anything but a transformation from ANSI C ASTs to ANSI C ASTs involves cracking open Pony itself and editing the parser and the AST description. Originally, my BSc project was going to be to fix this, allowing an interface into Pony without cracking Pony itself. I worked on this for about a year, planning on using the notions from <a href="http://www.cs.ru.nl/~W.Swierstra/Publications/DataTypesALaCarte.pdf">Wouter Swierstra’s Data Types a la Carte</a> to fix the parser issue. However, I ran into many issues with this, which I’ve detailed in previous posts. At the time, I was hopeful that I would find a way around this, however, I did not.</p>
+<p>Instead, my project changed. One of the major problems with Pony development was that there were no major Pony projects to test things with. So, my project ended up being to provide one in one semester. The project was a DSL for the <a href="http://composite.seas.gwu.edu/">Composite Operating System</a> developed at my university. This DSL described the ways that components of the system could interface with each other, and inserted dynamic checks to insure that the interfaces were being implemented correctly. I did this the “old-fashioned” way, by cracking apart Pony and changing the internals.</p>
+<p>However, this doesn’t mean that I’ve given up on the idea of providing Pony with an interface that can be used without the Pony source. But, I don’t think that Data Types a la Carte will not work with the idea. Proving this, however, is not something that I’m actively working on. Instead, I think that the correct solution would be to change Pony from an extensible compiler to a compiler compiler. Pony should be given two new DSLs that would provide the interface. At the end, Pony would output a program, which would be a compiler from your new language to another.</p>
+<p>What would these two DSLs be? One would be a language for describing transformations between ASTs. This might be an internal haskell DSL, or it might be an external DSL. The second, however, would be a declarative parser DSL, similar to that of Happy. However, it would probably be more like that in <a href="http://enso-lang.org/">Ensō</a>. Like the Ensō language, it would automatically generate ASTs and pretty-printers. It would also include a notion of extension, similar to in object-oriented languages.</p>
+<p>This would also mean that a project that used a Pony language wouldn’t require Pony to work on. Instead, Pony would only be required to develop the Pony language itself. This could potentially be a large benefit.</p>
+<p>However, it should still be possible to create a truly extensible parser in Haskell. However, the methods are not as pretty as the Data Types a la Carte method. There are two main methods I can think of: 1. Use Template Haskell to write a Parsec for you, similarly to the above. This is really ugly. 2. Write a GHC extension to allow for first-class subtypes (as in Nuprl) and then have, if</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">A</span> <span class="fu">:&lt;:</span> <span class="dt">B</span></code></pre>
+<p>then</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">(<span class="dt">Parser</span> <span class="dt">A</span>) <span class="fu">:&lt;:</span> (<span class="dt">Parser</span> <span class="dt">B</span>)</code></pre>
+<p>However, this requires significant GHC hacking.</p>
+<p>I believe that the best option for Pony is to create compiler executable.</p>
+]]></description>
+    <pubDate>Sat, 15 Jun 2013 00:00:00 UT</pubDate>
+    <guid>http://akhirsch.github.io//posts/2013-06-15-on-pony.html</guid>
+</item>
+<item>
+    <title>Parsing Without Tying the Recursive Knot</title>
+    <link>http://akhirsch.github.io//posts/2012-11-19-parsing-without-tieing.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on November 19, 2012
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>I’m continuing in my exploration of fully-functional extensible parsing. In particular, I’ve spent some time diving in to the Parser monad from Parsec 2, and I’ve defined the problem I’ve been having.</p>
+<p>If you’ve ever taken a look at <em>Data Types a la Carte</em> by Wouter Sweirstra, then you know that it defines /Terms/ as follows:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- Term f :: (* -&gt; *) -&gt; *</span>
+<span class="kw">data</span> <span class="dt">Term</span> f <span class="fu">=</span> f (<span class="dt">Term</span> f)</code></pre>
+<p>In other words, <code>Term</code> calculates the fixed point of the functor <code>f</code>. Sweirstra refers to this as “tying the recursive knot”. The secret to the paper, is to give ADTs as sums of functors (where the sum of two functors is a functor), then tie the recursive know over the entire structure. The sum of two functors is given as</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> f <span class="fu">:+:</span> g <span class="fu">=</span> inl f
+             <span class="fu">|</span> inr g
+
+<span class="kw">instance</span> (<span class="kw">Functor</span> f, <span class="kw">Functor</span> g) <span class="ot">=&gt;</span> <span class="kw">Functor</span> f <span class="fu">:+:</span> g <span class="kw">where</span>
+  <span class="fu">fmap</span> (inl f) e <span class="fu">=</span> inl (<span class="fu">fmap</span> f e)
+  <span class="fu">fmap</span> (inr g) e <span class="fu">=</span> inr (<span class="fu">fmap</span> g e)</code></pre>
+<p>The difficulty comes when parsing. In particular, we need to parse into some closed datatype. In particular, you can think of the “untied” ADTs as not having a shape, and tying the knot as giving them shape. Parsing gives a shape to some text as data, and thus it needs some shaped data structure to parse into. However, if we give a shape to the data structure, then we cannot then add more pieces to it.</p>
+<p>Then, the question becomes, can we parse into an unshaped data structure? It’s easy enough to imagine a parser for the <code>Add</code> functor:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">   <span class="dt">ParseAdd</span><span class="ot"> ::</span> <span class="dt">Parser</span> e <span class="ot">-&gt;</span> <span class="dt">Parser</span> (<span class="dt">Add</span> e)
+   <span class="dt">ParseAdd</span> p <span class="fu">=</span> <span class="kw">do</span>
+     char <span class="ch">&#39;+&#39;</span>
+     spaces
+     s1 <span class="ot">&lt;-</span> p
+     spaces
+     s2 <span class="ot">&lt;-</span> p
+     spaces
+     <span class="fu">return</span> <span class="fu">$</span> <span class="dt">Add</span> s1 s2</code></pre>
+<p>Then, the question becomes, can we define a parser for <code>Term Add</code> using this parser for <code>Add e</code>? One can imagine it might look something like</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"> <span class="dt">AddParser</span><span class="ot"> ::</span> <span class="dt">Parser</span> (<span class="dt">Term</span> <span class="dt">Add</span>)
+ <span class="dt">AddParser</span> <span class="fu">=</span> fix <span class="dt">ParseAdd</span></code></pre>
+<p>However, this would give an error: <code>fix</code> has the type <code>(a -&gt; a) -&gt; a</code>, however, <code>Parser e</code> obviously does not equal <code>Parser (Add e)</code>. What can we do then?</p>
+<p>It is this question that I’m currently working on.</p>
+]]></description>
+    <pubDate>Mon, 19 Nov 2012 00:00:00 UT</pubDate>
+    <guid>http://akhirsch.github.io//posts/2012-11-19-parsing-without-tieing.html</guid>
+</item>
+<item>
+    <title>Diving Into the Parser Monad</title>
+    <link>http://akhirsch.github.io//posts/2012-11-19-diving-into-the-parser-monad.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on November 19, 2012
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>So, in my other post today I’ve noted that I’ve spent some time diving into the Parser monad. In particular, I have two ADTs, <code>Sig</code> and <code>Sig'</code>, with <code>Sig :&lt;: Sig'</code>, and I want to use a parser for <code>Sig</code>s to define a parser for <code>Sig'</code>s. So, let’s take a look at the definitions for <code>Parser</code> in Parsec2.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Parser</span> a <span class="fu">=</span> <span class="dt">GenParser</span> <span class="dt">Char</span> () a
+    
+<span class="kw">newtype</span> <span class="dt">GenParser</span> tok st a <span class="fu">=</span> <span class="dt">Parser</span> (<span class="dt">State</span> tok st <span class="ot">-&gt;</span> <span class="dt">Consumed</span> (<span class="dt">Reply</span> tok st a))
+   
+<span class="kw">data</span> <span class="dt">Consumed</span> a <span class="fu">=</span> <span class="dt">Consumed</span> a
+                <span class="fu">|</span> <span class="dt">Empty</span> <span class="fu">!</span>a
+		    
+<span class="kw">data</span> <span class="dt">Reply</span> tok st a <span class="fu">=</span> <span class="dt">Ok</span> <span class="fu">!</span>a <span class="fu">!</span>(<span class="dt">State</span> tok st) <span class="dt">ParseError</span>
+                    <span class="fu">|</span> <span class="dt">Error</span> <span class="dt">ParseError</span>
+
+<span class="kw">data</span> <span class="dt">State</span> tok st <span class="fu">=</span> <span class="dt">State</span> {<span class="ot"> stateInput ::</span> [tok]
+                          ,<span class="ot"> statePos   ::</span> <span class="fu">!</span><span class="dt">SourcePos</span>
+                          ,<span class="ot"> stateUser  ::</span> <span class="fu">!</span>st
+                          }</code></pre>
+<p>So what does this mean? A Parser is a parser for characters, that holds no state structure, and returns an <code>a</code>. A generic parser is a function from a state to a reply. A reply carries an <code>a</code> and some state. State has a stream of tokens and a position in that stream, as well as a piece of state structure.</p>
+<p>So, is it possible to use this to create a parser the way I want to? There doesn’t seem to be a simple solution. However, the state data structure is unused in most parsers: it may very well be possible to use it in creating this sort of parser.</p>
+]]></description>
+    <pubDate>Mon, 19 Nov 2012 00:00:00 UT</pubDate>
+    <guid>http://akhirsch.github.io//posts/2012-11-19-diving-into-the-parser-monad.html</guid>
+</item>
+<item>
+    <title>Fully Functional Extensible Parsers</title>
+    <link>http://akhirsch.github.io//posts/2012-11-08-ext-parser.html</link>
+    <description><![CDATA[<div class="info">
+    Posted on November  8, 2012
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>For my senior design project, I have taken over a code base known as Pony. Pony is a compiler; but there’s a twist: Pony doesn’t compile a single language, rather it compiles <em>to</em> a single language: ANSI C. The idea is that Pony would, by default, compile ANSI C to ANSI C, but allow users to specify additions and changes to C, and compile those back into C itself. Pony should also allow users to specify how to compile a completely different language, say scheme, into C.</p>
+<p>Two years ago, Patrick Thompson (now of Apple Computers), created Pony and defined how transformations into C could be written. He has also written a parser for ANSI C, with the possibility of adding in new operators. The problem comes when more complex syntactic transformations need to take place: for example when we want to add class-based objects to C. For this, we need some form of extensible compiler.</p>
+<p>For various reasons (not excluding preferences, but including ease of verification), Pony is entirely written in Haskell. After some searching, my professor and I have not discovered anybody who claims to have written an extensible parser in Haskell. So, this has become the first job of my senior design.</p>
+<p>We have decided to make the Abstract Syntax Trees that we parse into composable, using the <a href="http://hackage.haskell.org/package/compdata">Compdata library</a>. This allows us to extend the AST in exactly the way that we want. Now, we simply have to write a parser for these trees.</p>
+<p>There are generally two standard ways to write parsers in Haskell: <a href="http://www.haskell.org/happy/">Happy</a>, which is a standard parser generator like yacc; and <a href="http://www.haskell.org/haskellwiki/Parsec">Parsec</a>, which is a parser combinator library. Since we want to build things on the fly, Parsec seemed the obvious choice.</p>
+<p>The first attempt at a parser seemed to go well. We were able to write a simple calculator, with AST <code>Sig</code>, and an extension, with AST <code>Sig'</code>. Then, we were able to write a parser for <code>Term Sig</code> rather easily, and then we were able to write a parser for <code>Term Sig'</code> as follows:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Sig&#39;Parser</span><span class="ot"> ::</span> <span class="dt">Parser</span> (<span class="dt">Term</span> <span class="dt">Sig&#39;</span>)  
+<span class="dt">Sig&#39;Parser</span> <span class="fu">=</span> <span class="dt">MultParser</span> <span class="fu">&lt;|&gt;</span> <span class="kw">do</span>  
+  sig <span class="ot">&lt;-</span> <span class="dt">SigParser</span>  
+  <span class="fu">return</span> <span class="fu">$</span> deepInject2 sig  </code></pre>
+<p>Where <code>SigParser</code> was the parser for <code>Term Sig</code> and <code>MultParser</code> was the parser for the extension.</p>
+<p>Perhaps, you can already see the problem here. We did not at first, as it compiled and ran fine on the input we were giving it. We gave it the input “* + 3 2 4”, because the parser was pre-order. In this case it worked perfectly, but then we gave it slightly different input: “+ * 3 2 4”. The result?</p>
+<p>No parse.</p>
+<p>To see why this is, you must look at the definition of <code>Sig'Parser</code>. Since we are parsing something that is not a multiplication, it must be something of type <code>Sig</code>. Since <code>Sig</code> only knows how to add, the <code>Sig</code> parser choked when given something that had a multiplaction symbol.</p>
+<p>Now, I am playing with solutions to this problem. I think that the solution is going to be to go into the Parsec monad and see if we can build something that is compositional within the monad. This will probably spawn more posts as I work on it. However, even in the case where that doesn’t happen, we still have the step-aside solution of Template Haskell.</p>
+<p>Long story short, programming fully functional extensible parsers is not easy.</p>
+]]></description>
+    <pubDate>Thu, 08 Nov 2012 00:00:00 UT</pubDate>
+    <guid>http://akhirsch.github.io//posts/2012-11-08-ext-parser.html</guid>
+</item>
+
+    </channel> 
+</rss>

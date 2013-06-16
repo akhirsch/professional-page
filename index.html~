@@ -1,0 +1,26 @@
+---
+title: Home
+---
+
+<h2>Home</h2>
+
+<img src="/images/face.jpg" style="float: right; margin: 10px;" />
+
+<p>Hello!</p>
+
+<p>This is the website and blog of Andrew K. Hirsch.
+The blog posts here are my little contributions to the computer science culture of the internet.
+I post about projects that I'm working on, ideas that I'm playing with, and cool things I've found.</p>
+
+<p>I also post reports on my professional trips, an idea I got from Edsgar Dijkstra.
+You can also find my reports on my research projects.
+The recent posts, and reports are listed below.</p>
+
+<h2>Posts</h2>
+$partial("templates/post-list.html")$
+
+<h2>Research Projects</h2>
+$partial("templates/project-list.html")$
+
+<h2>Trip Reports</h2>
+$partial("templates/report-list.html")$

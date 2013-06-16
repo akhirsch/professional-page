@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Andrew Hirsch: Language and Logic - On Pony</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Andrew Hirsch: Language and Logic</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+                <a href="../research.html">Research</a>
+                <a href="../tripreports.html">Trips</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>On Pony</h1>
+
+            <div class="info">
+    Posted on June 15, 2013
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>With the school year over, I’ve been working on updating this website. In particular, I’ve been working on updating to Hakyll 4. Previously, it was written in Hakyll 3. However, in doing so, I’ve been updating the blog posts I’ve posted previously to literate haskell. This has come to make me realize that I posted several posts on work I was doing on the Pony compiler, and that I never posted about what conclusions those came to.</p>
+<p>Pony, for the uninitiated (i.e. those that didn’t read my last posts, as the rest of the initiated consist pretty much exclusively of the 4 people who have done work on Pony), is an augmented C to ANSI C compiler. Pony allows programmers to write, in haskell, a program for transforming abstract syntax trees (ASTs). This means that we can write Domain Specific Languages (DSLs) into C, or write compilers for other languages into C.</p>
+<p>However, as I’ve noted in previous posts, writing anything but a transformation from ANSI C ASTs to ANSI C ASTs involves cracking open Pony itself and editing the parser and the AST description. Originally, my BSc project was going to be to fix this, allowing an interface into Pony without cracking Pony itself. I worked on this for about a year, planning on using the notions from <a href="http://www.cs.ru.nl/~W.Swierstra/Publications/DataTypesALaCarte.pdf">Wouter Swierstra’s Data Types a la Carte</a> to fix the parser issue. However, I ran into many issues with this, which I’ve detailed in previous posts. At the time, I was hopeful that I would find a way around this, however, I did not.</p>
+<p>Instead, my project changed. One of the major problems with Pony development was that there were no major Pony projects to test things with. So, my project ended up being to provide one in one semester. The project was a DSL for the <a href="http://composite.seas.gwu.edu/">Composite Operating System</a> developed at my university. This DSL described the ways that components of the system could interface with each other, and inserted dynamic checks to insure that the interfaces were being implemented correctly. I did this the “old-fashioned” way, by cracking apart Pony and changing the internals.</p>
+<p>However, this doesn’t mean that I’ve given up on the idea of providing Pony with an interface that can be used without the Pony source. But, I don’t think that Data Types a la Carte will not work with the idea. Proving this, however, is not something that I’m actively working on. Instead, I think that the correct solution would be to change Pony from an extensible compiler to a compiler compiler. Pony should be given two new DSLs that would provide the interface. At the end, Pony would output a program, which would be a compiler from your new language to another.</p>
+<p>What would these two DSLs be? One would be a language for describing transformations between ASTs. This might be an internal haskell DSL, or it might be an external DSL. The second, however, would be a declarative parser DSL, similar to that of Happy. However, it would probably be more like that in <a href="http://enso-lang.org/">Ensō</a>. Like the Ensō language, it would automatically generate ASTs and pretty-printers. It would also include a notion of extension, similar to in object-oriented languages.</p>
+<p>This would also mean that a project that used a Pony language wouldn’t require Pony to work on. Instead, Pony would only be required to develop the Pony language itself. This could potentially be a large benefit.</p>
+<p>However, it should still be possible to create a truly extensible parser in Haskell. However, the methods are not as pretty as the Data Types a la Carte method. There are two main methods I can think of: 1. Use Template Haskell to write a Parsec for you, similarly to the above. This is really ugly. 2. Write a GHC extension to allow for first-class subtypes (as in Nuprl) and then have, if</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">A</span> <span class="fu">:&lt;:</span> <span class="dt">B</span></code></pre>
+<p>then</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">(<span class="dt">Parser</span> <span class="dt">A</span>) <span class="fu">:&lt;:</span> (<span class="dt">Parser</span> <span class="dt">B</span>)</code></pre>
+<p>However, this requires significant GHC hacking.</p>
+<p>I believe that the best option for Pony is to create compiler executable.</p>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Andrew Hirsch: Language and Logic - Sigma Calculus</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Andrew Hirsch: Language and Logic</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+                <a href="../research.html">Research</a>
+                <a href="../tripreports.html">Trips</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Sigma Calculus</h1>
+
+            <div class="info">
+    Posted on June 15, 2013
+    
+        by Andrew Hirsch
+    
+</div>
+
+<p>I’ve recently gotten my hands on Abadi and Cardelli’s “A Theory of Objects”. In it, they produce an interesting calculus for object-oriented languages. I give a haskell version, below. This post is literate haskell. Get it <a href="../posts/2013-06-15-sigma-calculus.lhs">here</a>.</p>
+<p>I’m going to start out with some general haskell boilerplate.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span> <span class="kw">module</span> <span class="dt">Sigma</span> <span class="kw">where</span> 
+<span class="ot">&gt;</span>  
+<span class="ot">&gt;</span>   <span class="kw">import</span> Data.List
+<span class="ot">&gt;</span>   <span class="kw">import</span> Data.Char</code></pre>
+<p>Now, we’re going to define variables and labels. We define both to be just strings, this makes for easier printing later. We also define <code>Show</code> instances for both of these, for the same reason.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">Var</span> <span class="fu">=</span> <span class="dt">Var</span> <span class="dt">String</span>
+<span class="ot">&gt;</span>           <span class="kw">deriving</span> <span class="kw">Eq</span>
+<span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">Label</span> <span class="fu">=</span> <span class="dt">Label</span> <span class="dt">String</span>
+<span class="ot">&gt;</span>               <span class="kw">deriving</span> <span class="kw">Eq</span>
+<span class="ot">&gt;</span>  
+<span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">Var</span> <span class="kw">where</span>
+<span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Var</span> s) <span class="fu">=</span> s
+<span class="ot">&gt;</span>    
+<span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">Label</span> <span class="kw">where</span>
+<span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Label</span> s) <span class="fu">=</span> s</code></pre>
+<p>A method, much like a function in the lambda-calculus, is something with a variable and a term in which that variable may be free. The difference is, that we expect that a method is provided the object in which it resides as an argument. That is, the heart of object orientation, from Abadi and Cardelli’s point of view, is <em>self-application</em>.</p>
+<p>We write this similarly to a lambda function as well, except we use ς instead. This is the Greek letter sigma, in final word form.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">Method</span> <span class="fu">=</span> <span class="dt">Method</span> <span class="dt">Var</span> <span class="dt">SigmaTerm</span>
+<span class="ot">&gt;</span>              <span class="kw">deriving</span> <span class="kw">Eq</span>
+<span class="ot">&gt;</span>  
+<span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">Method</span> <span class="kw">where</span>
+<span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Method</span> v a) <span class="fu">=</span> <span class="st">&quot;ς(&quot;</span> <span class="fu">++</span> <span class="fu">show</span> v <span class="fu">++</span> <span class="st">&quot;)&quot;</span> <span class="fu">++</span> <span class="fu">show</span> a</code></pre>
+<p>Now, a Sigma term can be one of 4 things.</p>
+<p>First, it can be a variable.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">data</span> <span class="dt">SigmaTerm</span> <span class="fu">=</span> <span class="dt">SigmaVar</span> <span class="dt">Var</span></code></pre>
+<p>Secondly, it can be an object. We view objects as a listing of methods, with labels for those methods.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="fu">|</span> <span class="dt">Object</span> [(<span class="dt">Label</span>, <span class="dt">Method</span>)]</code></pre>
+<p>We can call methods by providing the label.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="fu">|</span> <span class="dt">MethodCall</span> <span class="dt">SigmaTerm</span> <span class="dt">Label</span></code></pre>
+<p>Finally, we can replace a method with another. Again, we note the method with its label.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="fu">|</span> <span class="dt">Replacement</span> <span class="dt">SigmaTerm</span> <span class="dt">Label</span> <span class="dt">Method</span></code></pre>
+<p>We derive an Eq form for convinience sake.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>                 <span class="kw">deriving</span> <span class="kw">Eq</span></code></pre>
+<p>To write terms, we do things in much the same way as is common in object oriented languages in the wild. The difference is in replacement, which doesn’t have a standard way of doing things, and objects themselves, which are usually not written in languages in the wild.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  <span class="kw">instance</span> <span class="kw">Show</span> <span class="dt">SigmaTerm</span> <span class="kw">where</span></code></pre>
+<p>Variables are written just as strings.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">SigmaVar</span> v) <span class="fu">=</span> <span class="fu">show</span> v</code></pre>
+<p>Objects are written in list format. We write <code>l = m</code> for a method <code>m</code> with label <code>l</code>.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Object</span> ms) <span class="fu">=</span> <span class="st">&quot;[&quot;</span> <span class="fu">++</span> (<span class="fu">concat</span> <span class="fu">$</span> 
+<span class="ot">&gt;</span>                               (intersperse <span class="st">&quot;,&quot;</span> 
+<span class="ot">&gt;</span>                               (<span class="fu">map</span> (\(l,m) <span class="ot">-&gt;</span> <span class="fu">show</span> l <span class="fu">++</span> <span class="st">&quot;=&quot;</span> <span class="fu">++</span> <span class="fu">show</span> m) ms))) 
+<span class="ot">&gt;</span>                           <span class="fu">++</span> <span class="st">&quot;]&quot;</span></code></pre>
+<p>We write method calls with the standard <code>.</code> syntax. Since replacements are visually complicated, we wrap them in parentheses.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">MethodCall</span> a l) <span class="fu">=</span> (show' a) <span class="fu">++</span> <span class="st">&quot;.&quot;</span> <span class="fu">++</span> (<span class="fu">show</span> l)
+<span class="ot">&gt;</span>      <span class="kw">where</span> show' a'<span class="fu">@</span>(<span class="dt">Replacement</span> _ _ _) <span class="fu">=</span> <span class="st">&quot;(&quot;</span> <span class="fu">++</span> <span class="fu">show</span> a' <span class="fu">++</span> <span class="st">&quot;)&quot;</span>
+<span class="ot">&gt;</span>            show' a' <span class="fu">=</span> <span class="fu">show</span> a'</code></pre>
+<p>Replacements are written with the form <code>a.l⇐m</code>, where <code>a</code> is an object, <code>l</code> is a label, and <code>m</code> is a method.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>    <span class="fu">show</span> (<span class="dt">Replacement</span> a l m) <span class="fu">=</span> (<span class="fu">show</span> a) <span class="fu">++</span> <span class="st">&quot;.&quot;</span> <span class="fu">++</span> (<span class="fu">show</span> l) <span class="fu">++</span> <span class="st">&quot;⇐&quot;</span> <span class="fu">++</span> (<span class="fu">show</span> m)</code></pre>
+<p>We now look at determining free variables. We have to use two functions because we seperated methods from terms; this is going to be a common theme in this post.</p>
+<p>We remove all instances of the variable <code>v</code> from the free variables in a method. This makes sense, since the method binds <code>v</code>. The way we determine free variables for terms is obvious.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;  freeVariablesInMethod ::</span> <span class="dt">Method</span> <span class="ot">-&gt;</span> [<span class="dt">Var</span>]
+<span class="ot">&gt;</span>  freeVariablesInMethod (<span class="dt">Method</span> v st) <span class="fu">=</span> delete v (nub <span class="fu">.</span> freeVariables <span class="fu">$</span> st)
+<span class="ot">&gt;</span>                   
+<span class="ot">&gt;  freeVariables ::</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> [<span class="dt">Var</span>]
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">SigmaVar</span> v) <span class="fu">=</span> [v]
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">Object</span> l) <span class="fu">=</span> <span class="fu">concatMap</span> (\(_,m) <span class="ot">-&gt;</span> freeVariablesInMethod m) l
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">MethodCall</span> a _) <span class="fu">=</span> freeVariables a
+<span class="ot">&gt;</span>  freeVariables (<span class="dt">Replacement</span> a _ m) <span class="fu">=</span> (freeVariables a) <span class="fu">++</span> (freeVariablesInMethod m)</code></pre>
+<p>We define the semantics of our calculus via a function outcome. This is rather obvious, especially the first two terms. Note that it is possible to write failing terms, which we represent by the use of <code>Maybe</code>.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;  outcome ::</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">SigmaTerm</span>
+<span class="ot">&gt;</span>  outcome (<span class="dt">SigmaVar</span> v) <span class="fu">=</span> <span class="kw">Just</span> (<span class="dt">SigmaVar</span> v)
+<span class="ot">&gt;</span>  outcome (<span class="dt">Object</span> l) <span class="fu">=</span> <span class="kw">Just</span> (<span class="dt">Object</span> l)</code></pre>
+<p>A method call looks up the method that is being called. Then, it performs something similar to the standard β-reduction from lambda calculus. However, it provides the method with the object in which it is obtained. This is the self-application I talked about earlier. It’s also where we model dynamic dispatch in the calculus.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  outcome (<span class="dt">MethodCall</span> a l) <span class="fu">=</span> <span class="kw">let</span> o <span class="fu">=</span> outcome a <span class="kw">in</span>
+<span class="ot">&gt;</span>    <span class="kw">case</span> o <span class="kw">of</span>
+<span class="ot">&gt;</span>      <span class="kw">Just</span> (<span class="dt">Object</span> ms) <span class="ot">-&gt;</span> <span class="kw">case</span> <span class="fu">lookup</span> l ms <span class="kw">of</span>
+<span class="ot">&gt;</span>        <span class="kw">Just</span> (<span class="dt">Method</span> v m) <span class="ot">-&gt;</span> <span class="kw">Just</span> (subst m v (<span class="dt">Object</span> ms))
+<span class="ot">&gt;</span>        <span class="kw">Nothing</span> <span class="ot">-&gt;</span> <span class="kw">Nothing</span>
+<span class="ot">&gt;</span>      _ <span class="ot">-&gt;</span> <span class="kw">Nothing</span></code></pre>
+<p>Replacement simply does functional replacement on methods. That is, it looks up the label in the object, and creates a new object with the new method bound to that label.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;</span>  outcome (<span class="dt">Replacement</span> a l m) <span class="fu">=</span> <span class="kw">let</span> o <span class="fu">=</span> outcome a <span class="kw">in</span> 
+<span class="ot">&gt;</span>    <span class="kw">case</span> o <span class="kw">of</span>
+<span class="ot">&gt;</span>      <span class="kw">Just</span> (<span class="dt">Object</span> ms) <span class="ot">-&gt;</span> <span class="kw">Just</span> <span class="fu">.</span> <span class="dt">Object</span> <span class="fu">$</span> <span class="fu">map</span> (\(li,mi) <span class="ot">-&gt;</span> <span class="kw">if</span> li <span class="fu">==</span> l
+<span class="ot">&gt;</span>                                                           <span class="kw">then</span> (li, m)
+<span class="ot">&gt;</span>                                                           <span class="kw">else</span> (li, mi)) ms
+<span class="ot">&gt;</span>      _ <span class="ot">-&gt;</span> <span class="kw">Nothing</span></code></pre>
+<p>Note that this requires the notion of subsitution. However, the notion of subsitution here is rather uninspiring to a student of the lambda calculus. I give the definition here for the code, and for interested parties to study.</p>
+<pre class="sourceCode literate literatehaskell"><code class="sourceCode literatehaskell"><span class="ot">&gt;  substInMethod ::</span> <span class="dt">Method</span> <span class="ot">-&gt;</span> <span class="dt">Var</span> <span class="ot">-&gt;</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">Method</span>
+<span class="ot">&gt;</span>  substInMethod (<span class="dt">Method</span> v st) v1 a <span class="fu">=</span> <span class="kw">if</span> v <span class="fu">==</span> v1 
+<span class="ot">&gt;</span>                               <span class="kw">then</span> <span class="kw">let</span> v' <span class="fu">=</span> <span class="dt">Var</span> [
+<span class="ot">&gt;</span>                                              (<span class="fu">chr</span> <span class="fu">.</span> <span class="fu">sum</span> <span class="fu">.</span> (<span class="fu">concatMap</span> 
+<span class="ot">&gt;</span>                                                            (\(<span class="dt">Var</span> v'') <span class="ot">-&gt;</span> <span class="fu">map</span> <span class="fu">ord</span> v'')) 
+<span class="ot">&gt;</span>                                           <span class="fu">$</span> freeVariablesInMethod (<span class="dt">Method</span> v st))]
+<span class="ot">&gt;</span>                                    <span class="kw">in</span> 
+<span class="ot">&gt;</span>                                     <span class="dt">Method</span> v' (subst (subst st v (<span class="dt">SigmaVar</span> v')) v1 a)
+<span class="ot">&gt;</span>                               <span class="kw">else</span> <span class="dt">Method</span> v (subst st v1 a)
+<span class="ot">&gt;</span>                                    
+<span class="ot">&gt;  subst ::</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">Var</span> <span class="ot">-&gt;</span> <span class="dt">SigmaTerm</span> <span class="ot">-&gt;</span> <span class="dt">SigmaTerm</span>
+<span class="ot">&gt;</span>  subst (<span class="dt">SigmaVar</span> v) v' a <span class="fu">=</span> <span class="kw">if</span> v <span class="fu">==</span> v' <span class="kw">then</span> a <span class="kw">else</span> <span class="dt">SigmaVar</span> v
+<span class="ot">&gt;</span>  subst (<span class="dt">Object</span> l) v a <span class="fu">=</span> <span class="dt">Object</span> <span class="fu">$</span> <span class="fu">map</span> (\(label, m) <span class="ot">-&gt;</span> (label, substInMethod m v a)) l
+<span class="ot">&gt;</span>  subst (<span class="dt">MethodCall</span> a l) v b <span class="fu">=</span> <span class="dt">MethodCall</span> (subst a v b) l
+<span class="ot">&gt;</span>  subst (<span class="dt">Replacement</span> a l m) v b <span class="fu">=</span> <span class="dt">Replacement</span> (subst a v b) l (substInMethod m v a)</code></pre>
+<p>I hope that you will see me posting more on this calculus in the near future.<br />In particular, I want to continue to explore its semantics and its relationship with the lambda calculus. I also want to explore how it models object systems in the wild. My facts will probably either (a) not be research-level material, such as this haskell implementation, or (b) come straight from Abadi &amp; Cardelli. I highly recommend looking up the details if you are interested.</p>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
