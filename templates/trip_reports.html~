@@ -1,4 +1,0 @@
-This is a list of trip reports that I have written detailing my 
-professional trips to different locations.
-
-$partial("templates/report-list.html")$

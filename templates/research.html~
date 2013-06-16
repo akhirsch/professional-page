@@ -1,4 +1,0 @@
-There is an rss feed for my research reports <a href="/rss/research.xml">here</a>.
-
-Here is a list of my past and present in research projects:
-$partial("templates/project-list.html")$
