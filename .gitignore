@@ -4,3 +4,6 @@
 _cache
 _site
 site
+*.pdf
+*.aux
+*.log

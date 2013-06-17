@@ -2,8 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
-
-
+import           System.Cmd (system)
+import           System.FilePath (takeDirectory, replaceExtension)
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
@@ -118,6 +118,17 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
     
+    match "cv.tex" $ do
+      route   $ setExtension "html"
+      compile $ pandocCompiler 
+        >>= loadAndApplyTemplate "templates/cv.html" defaultContext
+        >>= loadAndApplyTemplate "templates/default.html" defaultContext
+        >>= relativizeUrls
+        
+    match "cv.tex" $ version "pdf" $ do
+      route   $ setExtension "pdf"
+      compile $ getResourceBody >>= pdflatex
+
     create["rss/posts.xml"] $ do
       route   idRoute
       compile $ do 
@@ -162,6 +173,17 @@ tripReportFeedConfig = FeedConfiguration
   , feedRoot = "http://akhirsch.github.io/"
   }
      
+pdflatex :: Item String -> Compiler (Item TmpFile)
+pdflatex item = do
+  TmpFile texPath <- newTmpFile "cv.tex"
   
-
+  let tmpDir = takeDirectory texPath
+      pdfPath = replaceExtension texPath "pdf"
+  
+  unsafeCompiler $ do
+    writeFile texPath $ itemBody item
+    _ <- system $ unwords ["xelatex", "-output-directory", tmpDir, texPath, ">/dev/null", "2>&1"]
+    return $ ()
+    
+  makeItem $ TmpFile pdfPath
 
