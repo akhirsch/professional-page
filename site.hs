@@ -4,6 +4,7 @@ import           Data.Monoid (mappend)
 import           Hakyll
 import           System.Cmd (system)
 import           System.FilePath (takeDirectory, replaceExtension)
+import qualified Text.Pandoc as Pandoc
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
@@ -118,16 +119,22 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
     
-    match "cv.tex" $ do
+    match "cv.markdown" $ do
       route   $ setExtension "html"
       compile $ pandocCompiler 
         >>= loadAndApplyTemplate "templates/cv.html" defaultContext
         >>= loadAndApplyTemplate "templates/default.html" defaultContext
         >>= relativizeUrls
         
-    match "cv.tex" $ version "pdf" $ do
+    match "cv.markdown" $ version "pdf" $ do
       route   $ setExtension "pdf"
-      compile $ getResourceBody >>= pdflatex
+      compile $ do
+        cvTpl <- loadBody "templates/cv.tex"
+        getResourceBody
+          >>= (return . readPandoc)
+          >>= (return . fmap (Pandoc.writeLaTeX Pandoc.def))
+          >>= applyTemplate cvTpl defaultContext
+          >>= pdflatex
 
     create["rss/posts.xml"] $ do
       route   idRoute
@@ -182,7 +189,7 @@ pdflatex item = do
   
   unsafeCompiler $ do
     writeFile texPath $ itemBody item
-    _ <- system $ unwords ["xelatex", "-output-directory", tmpDir, texPath, ">/dev/null", "2>&1"]
+    _ <- system $ unwords ["pdflatex", "-output-directory", tmpDir, texPath, ">/dev/null", "2>&1"]
     return $ ()
     
   makeItem $ TmpFile pdfPath
