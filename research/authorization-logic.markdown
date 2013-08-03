@@ -20,7 +20,7 @@ NAL is used in the Nexus Operating System, developed at Cornell University.
 The Kripke semantics is also formalized in Coq.
 This is a technical report.
 
-- [Belief Semantics of Authorization Logics](http://arxiv.org/abs/1302.2123)
+- [Belief Semantics of Authorization Logics](/publications/belief_semantics_authorization_logics.pdf)
 
 Here, we work to give a more intuitive semantics to authorization logics.
 We equip each principal with a set of beliefs that it has. 
@@ -28,4 +28,5 @@ We show that this is equivalent to Kripke semantics, in the sense that it is
 always possible to construct a belief structure for any Kripke structure,
 such that they validate the same formulas.
 
-An updated version of this is under submission.
+This paper has been accepted to appear in CCS 2013. 
+Code can be found [here](/publications/focal.tar.gz) (tar file).

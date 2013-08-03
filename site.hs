@@ -8,6 +8,10 @@ import qualified Text.Pandoc as Pandoc
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
+    match "publications/*" $ do
+        route idRoute
+        compile copyFileCompiler
+      
     match "js/*" $ do
         route   idRoute
         compile copyFileCompiler 
