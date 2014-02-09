@@ -5,7 +5,7 @@ title: Curriculum Vitae
 # Andrew K. Hirsch
 
 
-<http://akhirsch.github.io/>
+<http://www.cs.cornell.edu/~akhirsch>
 
 <akhirsch@cs.cornell.edu>
 
@@ -21,6 +21,14 @@ title: Curriculum Vitae
 - Distributed Systems
 
 ## Theses and Research Projects
+
+- Categorical Semantics for Type-And-Effect Systems
+
+Effects are ubiquitous in programming languages.
+Ever since Moggi introduced monads in his computational lambda calculus,
+there have been generalizations and reformulations of categorical semantics of effect systems.
+Ross Tate discovered productors, the most general semantics for a large class of effects.
+I have been working on expanding the theory of productors (and consumptors, their dual).
 
 - Intuitionistic Model Theory
 
@@ -53,6 +61,10 @@ I discuss Turing categories, and note their use in proving theories in computabi
 This served as an Honor's thesis for my Bachelor's of Science degree.
 
 ## Teaching Experience
+
+- Computer System Organization and Programming, Spring 2014
+
+Graduate Teaching Assistant, Cornell University
 
 - Database Systems, Fall 2013
 
