@@ -15,5 +15,5 @@ and the foundations of computer science, mathematics, and science.
 
 Please check out my current and former research and publications.
 You can also find me on 
-<a href="https://http://arxiv.org/find/cs/1/au:+Hirsch_A/0/1/0/all/0/1">the arXiv</a>
+<a href="https://arxiv.org/find/cs/1/au:+Hirsch_A/0/1/0/all/0/1">the arXiv</a>
 if you're interested in reading some of my technical reports.
