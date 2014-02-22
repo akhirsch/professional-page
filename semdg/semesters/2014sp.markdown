@@ -1,0 +1,9 @@
+---
+title: 2014sp
+time: Mondays 3-4
+prettySem: Spring 2014
+place: Gates 405 (Freethought 1)
+pocs: <a href="http://www.cs.cornell.edu/~akhirsch">Andrew Hirsch</a>, <a href="http://www.cs.cornell.edu/~fabianm">Fabian Mühlböck</a>
+semester: 2014sp
+---
+
