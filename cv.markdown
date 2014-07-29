@@ -17,8 +17,8 @@ title: Curriculum Vitae
 ## Research Interests
 - Programming Languages
 - Mathematical Logic
-- Type Theory
-- Distributed Systems
+- Category Theory
+- (Theory of) Distributed Systems
 
 ## Theses and Research Projects
 
@@ -29,15 +29,6 @@ Ever since Moggi introduced monads in his computational lambda calculus,
 there have been generalizations and reformulations of categorical semantics of effect systems.
 Ross Tate discovered productors, the most general semantics for a large class of effects.
 I have been working on expanding the theory of productors (and consumptors, their dual).
-
-- Intuitionistic Model Theory
-
-Intuitionistic logics are an area of current active research interest.
-However, all of the completeness results to date have used classical meta-logics.
-Indeed, there are theorems that show that no instuitionistic completeness theorem exists.
-However, by using uniform evidence, it is possible to gain a intuitionistic completeness theorem for intuitionistic logic.
-This was shown by Constable and Bickford.
-I have been working on expanding this, and in particular on exploring connections with classical model theory.
 
 - Semantics for Authorization Logics
 
@@ -102,6 +93,8 @@ Undergraduate Teaching Assistant, The George Washington University
 
 ## Writing and Talks
 
+- Strictness and Laziness from Competing Effects, In submission to the ACM Symposium on Principals of Programming Languages, 2015
+
 - Belief Semantics for Authorization Logic, ACM Conference on Computer and Communications Security, 2013
 http://www.sigsac.org/ccs/CCS2013/
 
@@ -118,12 +111,11 @@ http://arxiv.org/abs/1211.3700
 - Team Member, GWU ACM ICPC Team, 2009 -- 2011
 
 ## Selected Relevant Courses
+- Advanced Programming Languages (Spring 2014)
 - Programming Languages (Spring 2010)
 - Computability Theory (Spring 2011)
 - Cryptography (Spring 2011)
-- Undergraduate Research in Computer Science -- Extensible Compilers (Fall 2011)
 - Topics in Logic -- Algorithmic Learning Theory (Fall 2011)
-- Undergraduate Research in Computer Science -- Semantics of Authorization Logic (Spring 2012)
 - Independent Study -- Category Theory (Spring 2012)
 - Topics in Security -- The Science of Security (Spring 2012)
 - Mathematical Logic (Fall 2012)
