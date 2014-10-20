@@ -18,7 +18,7 @@ title: Curriculum Vitae
 - Programming Languages
 - Mathematical Logic
 - Category Theory
-- (Theory of) Distributed Systems
+- Theory of Distributed Systems
 
 ## Theses and Research Projects
 
@@ -29,6 +29,10 @@ Ever since Moggi introduced monads in his computational lambda calculus,
 there have been generalizations and reformulations of categorical semantics of effect systems.
 Ross Tate discovered productors, the most general semantics for a large class of effects.
 I have been working on expanding the theory of productors (and consumptors, their dual).
+
+My recent work in this area has led to an understanding of strictness and laziness.
+The key idea is that, in most languages, both consumer and producer effects are often present.
+Depending on which is first resolved, either strict or lazy evaluation results.
 
 - Semantics for Authorization Logics
 
@@ -93,8 +97,6 @@ Undergraduate Teaching Assistant, The George Washington University
 
 ## Writing and Talks
 
-- Strictness and Laziness from Competing Effects, In submission to the ACM Symposium on Principals of Programming Languages, 2015
-
 - Belief Semantics for Authorization Logic, ACM Conference on Computer and Communications Security, 2013
 http://www.sigsac.org/ccs/CCS2013/
 
@@ -105,12 +107,15 @@ http://arxiv.org/abs/1211.3700
 
 ## Service
 
+- Theory of Programming Languages Seminar Czar, 2014 -- present
+- Programming Languages Discussion Group Czar, 2013 -- present
 - President, GWU ACM, 2011 -- 2013
 - Coach, GWU ACM ICPC Team, 2012
 - Treasurer, GWU ACM, 2010
 - Team Member, GWU ACM ICPC Team, 2009 -- 2011
 
 ## Selected Relevant Courses
+- Category Theory for Computer Scientists (Fall 2014)
 - Advanced Programming Languages (Spring 2014)
 - Programming Languages (Spring 2010)
 - Computability Theory (Spring 2011)
