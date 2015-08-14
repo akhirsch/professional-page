@@ -11,7 +11,7 @@ title: Curriculum Vitae
 
 ## Education
 - PhD in Computer Science, Cornell University (Expected), 2018
-- Masters in Computer Science, Cornell University (Expected), 2015
+- Masters in Computer Science, Cornell University (Expected), 2016
 - BS in Computer Science and Pure Mathematics, The George Washington University, 2013
 
 ## Research Interests
@@ -107,6 +107,7 @@ http://arxiv.org/abs/1211.3700
 
 ## Service
 
+- Computer Science Graduate Organization President, 2015 -- present
 - Theory of Programming Languages Seminar Czar, 2014 -- present
 - Programming Languages Discussion Group Czar, 2013 -- present
 - President, GWU ACM, 2011 -- 2013
