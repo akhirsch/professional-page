@@ -51,6 +51,7 @@ main = hakyll $ do
 
     match (fromList ["about.markdown"
                     , "contact.markdown"
+                    , "monads.markdown"
                     ]) $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
