@@ -38,8 +38,8 @@ p : Int -> Int.
 ```
 `q` has the same type:
 ```haskell
-q : Int -> Int
-```.
+q : Int -> Int.
+```
 Either `p` or `q` might return null, however.
 
 Certainly, we can compose `p` and `q`:
@@ -117,7 +117,7 @@ m >>= f = (id;;f) m.
 ```
 Conversely, we can write `;;` given `>>=`:
 ```haskell
-p;;q x = q >>= (p x).
+p;;q x = (p x) >>= q.
 ```
 So, Haskell's bind is equivalent to our composition operator.
 
