@@ -5,7 +5,7 @@ title: About
 This is the professional website of Andrew K. Hirsch.
 I am a PhD student at Cornell University in Ithaca, NY.
 I graduated from The George Washington University in 2013,
-with degrees in both Computer Science and Pure Mathematics.
+with a degree with concentrations in both Computer Science and Pure Mathematics.
 
 My interest are mostly in programming languages and logic. 
 I am especially interested in the denotational semantics of programming languages

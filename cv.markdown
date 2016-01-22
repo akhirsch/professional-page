@@ -109,7 +109,8 @@ http://arxiv.org/abs/1211.3700
 
 - Computer Science Graduate Organization President, 2015 -- present
 - Theory of Programming Languages Seminar Czar, 2014 -- present
-- Programming Languages Discussion Group Czar, 2013 -- present
+- Programming Languages Discussion Group Czar, 2013 -- 2015
+- Belle Sherman Elementary After School Program Volunter, 2014
 - President, GWU ACM, 2011 -- 2013
 - Coach, GWU ACM ICPC Team, 2012
 - Treasurer, GWU ACM, 2010

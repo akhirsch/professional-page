@@ -1,5 +1,6 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
+
 import           Data.Monoid (mappend)
 import           Hakyll
 import           System.Cmd (system)
@@ -198,6 +199,7 @@ semesterCompiler id = do
                      >>= loadAndApplyTemplate "semdg/templates/semester.html" ctx
                      >>= loadAndApplyTemplate "semdg/templates/default.html" ctx
                      >>= relativizeSemdgUrls
+
 
 getPandocBody :: Item String -> String
 getPandocBody = itemBody . writePandoc . readPandoc 
