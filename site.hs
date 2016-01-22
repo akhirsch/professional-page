@@ -115,61 +115,7 @@ main = hakyll $ do
           >>= (return . fmap (Pandoc.writeLaTeX Pandoc.def))
           >>= applyTemplate cvTpl defaultContext
           >>= pdflatex
-    match "semdg/templates/*" $ compile templateCompiler
-    match "semdg/images/*" $ do
-        route   idRoute
-        compile copyFileCompiler 
-    match "semdg/css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
-    match "semdg/js/*" $ do 
-        route   idRoute
-        compile copyFileCompiler -- Minimizer?
-    match "semdg/papers/*" $ do
-        route $ setExtension "html"
-        compile $ do
-             semesters   <- loadAll ("semdg/semesters/*" .&&. hasVersion "raw") :: Compiler [Item CopyFile]
-             md          <- getUnderlying >>= getMetadata 
-             let semester = fromMaybe "No Semester" $ M.lookup "semester" md
-             semesters'  <- mapM (sameSemester semester) semesters
-             let (curSemester:_) = map fst (filter snd (zip semesters semesters'))
-             md'         <- getMetadata (itemIdentifier curSemester)
-             let ctx     = foldl (\c (ident, d) -> c `mappend` (constField ident d)) defaultContext (M.toList md')
-
-             pandocCompiler
-               >>= loadAndApplyTemplate "semdg/templates/paper.html" ctx
-               >>= loadAndApplyTemplate "semdg/templates/default.html" ctx
-               >>= relativizeSemdgUrls
-    match "semdg/semesters/*" $ version "raw" $ do
-        route $ idRoute
-        compile $ copyFileCompiler
-    match "semdg/semesters/*" $ do
-        route $ setExtension "html"
-        compile $ getUnderlying >>= semesterCompiler
-    create ["semdg/archive.html"] $ do
-        route $ idRoute
-        compile $ do
-             sems <- loadAll ("semdg/semesters/*" .&&. hasNoVersion)
-             let ctx = listField "semester" defaultContext (return sems) `mappend` defaultContext
-
-             makeItem ""
-               >>= loadAndApplyTemplate "semdg/templates/archive.html" ctx
-               >>= loadAndApplyTemplate "semdg/templates/default.html" ctx
-               >>= relativizeSemdgUrls
- 
-    match "semdg/index.html" $ do 
-        route $ idRoute
-        compile $ do
-             sems     <- loadAll ("semdg/semesters/*" .&&. hasNoVersion) :: Compiler [Item String]
-             (cur:_)  <- sortByM semesterOrder sems
-             curUrl   <- getMetadataField (itemIdentifier cur) "semester"
-             let ctx = constField "cur" (fromMaybe "none" curUrl) `mappend` defaultContext
-              
-             getResourceBody
-               >>= applyAsTemplate ctx
-               >>= relativizeSemdgUrls
-
-
+          
 --------------------------------------------------------------------------------
      
 pdflatex :: Item String -> Compiler (Item TmpFile)
