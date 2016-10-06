@@ -11,28 +11,22 @@ title: Curriculum Vitae
 
 ## Education
 - PhD in Computer Science, Cornell University (Expected), 2018
-- Masters in Computer Science, Cornell University (Expected), 2016
-- BS in Computer Science and Pure Mathematics, The George Washington University, 2013
+- Master of Science in Computer Science, Cornell University, 2016
+- Bachelors of Science in Computer Science and Pure Mathematics, The George Washington University, 2013
 
 ## Research Interests
 - Programming Languages
 - Mathematical Logic
 - Category Theory
-- Theory of Distributed Systems
 
 ## Theses and Research Projects
 
 - Categorical Semantics for Type-And-Effect Systems
 
 Effects are ubiquitous in programming languages.
-Ever since Moggi introduced monads in his computational lambda calculus,
-there have been generalizations and reformulations of categorical semantics of effect systems.
-Ross Tate discovered productors, the most general semantics for a large class of effects.
-I have been working on expanding the theory of productors (and consumptors, their dual).
-
-My recent work in this area has led to an understanding of strictness and laziness.
-The key idea is that, in most languages, both consumer and producer effects are often present.
-Depending on which is first resolved, either strict or lazy evaluation results.
+Ever since Moggi introduced monads in his computational lambda calculus, there have been generalizations and reformulations of categorical semantics of effect systems.
+My work involves pushing back on the assumptions that are made in these models, and in applying those models to understand issues in programming languages.
+My most recent work involves relaxing the assumptions about the structure of the language that these models are built on.
 
 - Semantics for Authorization Logics
 
@@ -40,7 +34,7 @@ Authorization logics are used to describe and prove properties of authorization 
 We give a new semantics for authorization logics, based on the informal notion of semantics for
 the Nexus Authorization Logic (NAL).
 We show that this semantics is equivalent to the more traditional Kripke semantics.
-This work is in Computer and Communications Security 2013 in Berlin, Germany.
+This work was published in Computer and Communications Security 2013 in Berlin, Germany.
 
 - Domain Specific Language for Composite
 
@@ -56,6 +50,10 @@ I discuss Turing categories, and note their use in proving theories in computabi
 This served as an Honor's thesis for my Bachelor's of Science degree.
 
 ## Teaching Experience
+
+- Programming Languages, Fall 2016
+
+Graduate Teaching Assistant, Cornell University
 
 - Computer System Organization and Programming, Spring 2014
 
@@ -75,9 +73,10 @@ Undergraduate Teaching Assistant, The George Washington University
 
 ## Past Positions
 
-- Undergraduate Teaching Assistant, GWU Department of Computer Science, 2013
-    - Assist students in learning programming languages techniques
-    - Taught Ruby and SML
+- Intern, GrammaTech, 2016
+    - Research on the BRASS project
+    - Apply type-theoretic and programming-languages ideas to software engineering research
+    - Development in Common Lisp
 
 - Student Researcher, GWU Department of Computer Science, 2012
     - Work on semantics for authorization logics
@@ -107,8 +106,8 @@ http://arxiv.org/abs/1211.3700
 
 ## Service
 
-- Computer Science Graduate Organization President, 2015 -- present
-- Theory of Programming Languages Seminar Czar, 2014 -- present
+- Computer Science Graduate Organization President, 2015 -- 2016
+- Theory of Programming Languages Seminar Czar, 2014 -- Present
 - Programming Languages Discussion Group Czar, 2013 -- 2015
 - Belle Sherman Elementary After School Program Volunter, 2014
 - President, GWU ACM, 2011 -- 2013
