@@ -1,0 +1,57 @@
+<div id="header">	
+  <div id="identity">
+    <h1>Theory of Programming Languages Seminar</br></br>
+    <small>$prettySem$</br>
+    $time$, $place$ </br>
+    $pocs$</small></h1>
+  </div>
+  <div id="navigation">
+    <ul id="nav">
+      <li class="top"><a href="/index.html" class="top_link">Home</a></li>
+      <li class="top"><a href="/archive.html" class="top_link">Other Semesters</a></li>
+    </ul>
+  </div>
+</div>
+
+<hr />
+
+<div id="wrap">
+
+<div id="content">
+	
+<hr />
+<div id="overview">
+<h1>Overview</h1>  
+<p>TPLS is the Theory B seminar and reading group at Cornell.
+Every week, we read and discuss a paper that has something to do with programming language theory, logic, or semantics of systems.
+This page contains scheduling information, including links to the papers we will be reading.</p>
+<h3>Mailing list</h3>
+Sign up for the TPLS mailing list by sending an empty e-mail with subject "join" to <a id="emailtplsl" href="mailto:" class="email">
+	    <span id="emailtplsl_">[point here]</span>
+	    <script type="text/javascript">
+		showEmail("emailtplsl", "emailtplsl_", "wsop.o.qfrvfpw", "cornell.edu", 3, "TPLS mailing list join request","join");
+	    </script>
+	</a>.
+</div>
+<div id="schedule">
+<h1>Schedule</h1>
+<table>
+  <tr>
+    <th style="width:112px">Date</th>
+    <th>Title</th>
+    <th>Author(s)</th>
+    <th>Discussion Leader(s)</th>
+  </tr>
+  $for(papers)$
+    <tr>
+      <td>$date$
+      <td><a href="$url$">$papertitle$</a></td>
+      <td>$paperauthor$</td>
+      <td>$leader$</td>
+    </tr>
+  $endfor$
+</table>
+</ul>
+</div>
+</div>
+</div>
