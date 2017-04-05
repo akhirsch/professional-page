@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+
 body {
     color: black;
     font-size: 16px;
@@ -11,16 +13,73 @@ div#header {
     padding: 12px 0px 12px 0px;
 }
 
-div#logo a {
+div#name a {
     color: black;
-    float: left;
-    font-size: 18px;
+    font-size: 28px;
     font-weight: bold;
     text-decoration: none;
+    display: block;
+}
+div#name {
+    vertical-align:middle;
+    color: black;
+    display: block;
+    font-size:28px;
+    height:400px;
+    margin-bottom:10px;
+    margin:auto;
+    width: 250px;
+}
+
+span#facespan {
+    height:250px;
+    width: 100%;
+    display:block;
+    vertical-align:middle;
+    margin:auto;
+}
+
+img#face {
+    margin: auto;
+    width: 160px;
+    height:240px;
+    display: block;
+    vertical-align:middle;
+    align: center;
+}
+
+span#namespan{
+    vertical-align:middle;
+    display:block;
+    margin-top:10px;
+    text-align: center;
+}
+
+@media screen and (min-width:650px) {
+/* why is this not causing my image and title to be on the same line?*/
+    div#name {
+	margin: 0px;
+	width: 100%;
+    }
+    span#facespan {
+	margin:0px;
+	display: inline-block;
+    }
+    span#namespan {
+	margin:0px;
+	display: inline-block;
+	text-align:left;
+    }
+    img#face {
+	float: left;
+	margin: 10px;
+	display:inline-block;
+	align: default;
+    }	
 }
 
 div#header #navigation {
-    text-align: right;
+    text-align: center;
 }
 
 div#header #navigation a {
@@ -43,10 +102,12 @@ div#footer {
 
 h1 {
     font-size: 24px;
+    font-family: 'Vollkorn', serif;
 }
 
 h2 {
     font-size: 20px;
+    font-family: 'Vollkorn', serif;
 }
 
 div.info {
@@ -55,3 +116,6 @@ div.info {
     font-style: italic;
 }
 
+p {
+    font-family: 'Vollkorn', serif;
+}

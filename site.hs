@@ -1,12 +1,47 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
+
 import           Data.Monoid (mappend)
 import           Hakyll
-
-
+import           System.FilePath (takeDirectory, replaceExtension)
+import           System.Directory (getDirectoryContents)
+import           Data.Maybe (fromMaybe)
+import           Data.Char (isDigit)
+import           Control.Monad.ListM (sortByM)
+import qualified Data.Map as M
+import qualified Text.Pandoc as Pandoc
+import           System.Process (callProcess)
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
+    match "publications/*" $ do
+        route idRoute
+        compile copyFileCompiler
+        
+    match "pubs/*" $ do
+        route $ setExtension "html"
+        compile $ pandocCompiler
+          >>= loadAndApplyTemplate "templates/publication.html" defaultContext
+          >>= loadAndApplyTemplate "templates/default.html" defaultContext
+          >>= relativizeUrls
+    
+    create ["publications.html"] $ do
+        route idRoute
+        compile $ do
+          pubs <- loadAll "pubs/*"
+          let researchCtx = 
+                constField "title" "Publications"                 `mappend`
+                listField "pubs" defaultContext (return pubs)     `mappend`
+                defaultContext
+                
+          makeItem ""
+            >>= loadAndApplyTemplate "templates/publications.html" researchCtx
+            >>= loadAndApplyTemplate "templates/default.html" researchCtx
+            >>= relativizeUrls      
+    match "js/*" $ do
+        route   idRoute
+        compile copyFileCompiler 
+    
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
@@ -15,41 +50,46 @@ main = hakyll $ do
         route   idRoute
         compile compressCssCompiler
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
+    match (fromList ["about.markdown"
+                    , "contact.markdown"
+                    , "monads.markdown"
+                    ]) $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
-    match "posts/*" $ do
+
+    match "research/*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate "templates/project.html" defaultContext
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
-
-    create ["archive.html"] $ do
+        
+    create ["research.html"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let archiveCtx =
-                    listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Archives"            `mappend`
-                    defaultContext
-
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-                >>= relativizeUrls
-
+          prjcts <- loadAll "research/*"
+          let researchCtx = 
+                constField "title" "Research"                     `mappend`
+                listField "prjcts" defaultContext (return prjcts) `mappend`
+                defaultContext
+                
+          makeItem ""
+            >>= loadAndApplyTemplate "templates/research.html" researchCtx
+            >>= loadAndApplyTemplate "templates/default.html" researchCtx
+            >>= relativizeUrls
 
     match "index.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let indexCtx =
-                    listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Home"                `mappend`
+            prjcts <- loadAll "research/*"
+            pubs   <- loadAll "pubs/*"
+            let indexCtx = 
+                    listField "prjcts" defaultContext (return . take 10 $ prjcts) `mappend`
+                    listField "pubs" defaultContext (return . take 10 $ pubs)     `mappend`
+                    constField "title" "Home"                                     `mappend`
                     defaultContext
 
             getResourceBody
@@ -58,11 +98,37 @@ main = hakyll $ do
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
-
-
+    
+    match "cv.markdown" $ do
+      route   $ setExtension "html"
+      compile $ pandocCompiler 
+        >>= loadAndApplyTemplate "templates/cv.html" defaultContext
+        >>= loadAndApplyTemplate "templates/default.html" defaultContext
+        >>= relativizeUrls
+        
+    match "cv.markdown" $ version "pdf" $ do
+      route   $ setExtension "pdf"
+      compile $ do
+        cvTpl <- loadBody "templates/cv.tex"
+        getResourceBody
+          >>= readPandoc
+          >>= (return . fmap (Pandoc.writeLaTeX Pandoc.def))
+          >>= applyTemplate cvTpl defaultContext
+          >>= pdflatex
+          
 --------------------------------------------------------------------------------
-postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
+     
+pdflatex :: Item String -> Compiler (Item TmpFile)
+pdflatex item = do
+  TmpFile texPath <- newTmpFile "cv.tex"
+  
+  let tmpDir = takeDirectory texPath
+      pdfPath = replaceExtension texPath "pdf"
+  
+  unsafeCompiler $ do
+    writeFile texPath $ itemBody item
+    _ <- callProcess "pdflatex" ["-output-directory", tmpDir, texPath, ">/dev/null", "2>&1"]
+    return $ ()
+    
+  makeItem $ TmpFile pdfPath
 
