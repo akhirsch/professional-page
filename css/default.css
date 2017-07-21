@@ -8,7 +8,7 @@ body {
 }
 
 div#pagediv {
-	height: 100vh;    
+	height: max(100vh, 100%);    
 }
 div#header {
     border-bottom: 2px solid black;
@@ -104,7 +104,7 @@ div#footer {
     margin-top: 30px;
     padding: 12px 5px 12px 5px;
     text-align: right;
-    position: fixed;
+    position: relative;
     bottom: 0;
     width: 600px;
 }
