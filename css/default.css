@@ -7,10 +7,13 @@ body {
     width: 600px;
 }
 
+div#pagediv {
+	height: 100vh;    
+}
 div#header {
     border-bottom: 2px solid black;
     margin-bottom: 30px;
-    padding: 12px 0px 12px 0px;
+    padding: 12px 5px 12px 5px;
 }
 
 div#name a {
@@ -56,22 +59,25 @@ span#namespan{
 }
 
 @media screen and (min-width:650px) {
-/* why is this not causing my image and title to be on the same line?*/
     div#name {
 	margin: 0px;
 	width: 100%;
+	height: 250px;
     }
     span#facespan {
+	float: left;
 	margin:0px;
 	display: inline-block;
+	width: 160px;
     }
     span#namespan {
-	margin:0px;
 	display: inline-block;
-	text-align:left;
+	margin-left: 160px;
+	margin-right: auto;
+	top: 50%;
+	transform: translateY(50%);
     }
     img#face {
-	float: left;
 	margin: 10px;
 	display:inline-block;
 	align: default;
@@ -96,8 +102,11 @@ div#footer {
     color: #555;
     font-size: 12px;
     margin-top: 30px;
-    padding: 12px 0px 12px 0px;
+    padding: 12px 5px 12px 5px;
     text-align: right;
+    position: fixed;
+    bottom: 0;
+    width: 600px;
 }
 
 h1 {
@@ -118,4 +127,19 @@ div.info {
 
 p {
     font-family: 'Vollkorn', serif;
+}
+
+div#content {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+@media screen and (min-width:1500px) {
+    div#pagediv {
+	background-color: white;
+	margin: -5px;
+    }
+    body {
+	background-color: #bfbfbf;
+    }
 }
