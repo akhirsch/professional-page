@@ -10,16 +10,24 @@ title: Curriculum Vitae
 <akhirsch@cs.cornell.edu>
 
 ## Education
-- PhD in Computer Science, Cornell University (Expected), 2018
+- PhD in Computer Science, Cornell University (Expected), 2019
 - Master of Science in Computer Science, Cornell University, 2016
 - Bachelors of Science in Computer Science and Pure Mathematics, The George Washington University, 2013
 
 ## Research Interests
 - Programming Languages
-- Mathematical Logic
+- Mathematical Logic and Foundations of Mathematics
 - Category Theory
 
 ## Theses and Research Projects
+
+- Flow-Limited Authorization Logics
+
+Authorization logics are often used to describe correctness for authorizaiton mechanisms in distributed systems. 
+They allow flexibility in defining authorization policies and proof-theoretic tools for providing security guarantees. 
+However, these logics generally do not reflect the fact that often authorization decisions are based on private or low-integrity data. 
+We (Hirsch, Cecchetti, Arden, and Tate) are developing FLAFOL, the Flow-Limited Authorization First-Order Logic, which is an authorization logic with information flow labels. 
+FLAFOL describes the correctness of authorization mechanisms which respect information flow policies. FLAFOL also provides unique security guarantees: not only do the standard notions of non-interference for authorization logic and information flow labels hold, but we can show that the action of a correct authorization mechanism (with reference to FLAFOL) cannot leak private information, as determined by the labels.
 
 - Categorical Semantics for Type-And-Effect Systems
 
@@ -31,8 +39,7 @@ My most recent work involves relaxing the assumptions about the structure of the
 - Semantics for Authorization Logics
 
 Authorization logics are used to describe and prove properties of authorization policies.
-We give a new semantics for authorization logics, based on the informal notion of semantics for
-the Nexus Authorization Logic (NAL).
+We give a new semantics for authorization logics, based on the informal notion of semantics for the Nexus Authorization Logic (NAL).
 We show that this semantics is equivalent to the more traditional Kripke semantics.
 This work was published in Computer and Communications Security 2013 in Berlin, Germany.
 
@@ -50,6 +57,14 @@ I discuss Turing categories, and note their use in proving theories in computabi
 This served as an Honor's thesis for my Bachelor's of Science degree.
 
 ## Teaching Experience
+
+- Category Theory for Computer Scientists, Spring 2018
+
+Part-Time Graduate Teaching Assistant, Cornell University
+
+- Functional Programming and Data Structures, Fall 2017
+
+Graduate Teaching Assistant, Cornell University
 
 - Programming Languages, Fall 2016
 
@@ -96,8 +111,11 @@ Undergraduate Teaching Assistant, The George Washington University
 
 ## Writing and Talks
 
+- Strict and Lazy Semantics for Effects, ACM International Conference on Functional Programming, 2018
+
+
 - Belief Semantics for Authorization Logic, ACM Conference on Computer and Communications Security, 2013
-http://www.sigsac.org/ccs/CCS2013/
+https://dl.acm.org/citation.cfm?id=2516667
 
 - Nexus Authorization Logic (NAL): Logical Results, Technical Report, 2012
 http://arxiv.org/abs/1211.3700
