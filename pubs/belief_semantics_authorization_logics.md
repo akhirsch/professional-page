@@ -1,11 +1,10 @@
 ---
 title: Belief Semantics of Authorization Logic
-author: Andrew K. Hirsch
+author: Andrew K. Hirsch and Michael Clarkson
 publishedin: Computer and Communication Security
 location: Berlin, Germany
 year: 2013
 publisher: ACM
-pages: 561--572
 ---
 
 Abstract: Authorization logics have been used in the theory of computer security to reason about access control decisions.
@@ -16,5 +15,5 @@ A proof system is given for the logic; that system is proved sound with respect 
 The soundness proof for the belief semantics, and for a variant of the Kripke semantics, is mechanized in Coq.
 
 Releases:
-- [PDF](/publications/belief_semantics_authorization_logics.pdf)
+- [Preprint (PDF)](/publications/belief_semantics_authorization_logics.pdf)
 - [Coq Tarball](/publications/focal.tar.gz)
