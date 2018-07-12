@@ -8,5 +8,5 @@ Ever since Moggi introduced monads to programming language semantics in his comp
 See the works below:
 
 - [Strict and Lazy Semantics for Effects](/pubs/strict_and_lazy_semantics_for_effects.html)
-
-
+With Ross Tate.
+Published in the International Conference on Functional Computing, 2018.
