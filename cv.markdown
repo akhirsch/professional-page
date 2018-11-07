@@ -17,7 +17,8 @@ title: Curriculum Vitae
 ## Research Interests
 - Programming Languages
 - Mathematical Logic and Foundations of Mathematics
-- Category Theory
+- Category Theor
+- Information Security
 
 ## Theses and Research Projects
 
@@ -112,7 +113,8 @@ Undergraduate Teaching Assistant, The George Washington University
 ## Writing and Talks
 
 - Strict and Lazy Semantics for Effects, ACM International Conference on Functional Programming, 2018
-
+https://dl.acm.org/citation.cfm?doid=3243631.3236783
+http://www.cs.cornell.edu/~akhirsch/pubs/strict_and_lazy_semantics_for_effects.html
 
 - Belief Semantics for Authorization Logic, ACM Conference on Computer and Communications Security, 2013
 https://dl.acm.org/citation.cfm?id=2516667
