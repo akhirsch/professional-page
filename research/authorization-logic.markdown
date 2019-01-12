@@ -1,5 +1,5 @@
 ---
-title: Authorization Logic
+title: Belief Semantics Authorization Logic
 ---
 
 Authorization logics are logics for describing authorization in (distributed) computing systems.
