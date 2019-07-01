@@ -17,10 +17,10 @@ title: Curriculum Vitae
 ## Research Interests
 - Programming Languages
 - Mathematical Logic and Foundations of Mathematics
-- Category Theor
-- Information Security
+- Category Theory
+- Information and Systems Security
 
-## Theses and Research Projects
+## Research Projects
 
 - Flow-Limited Authorization Logics
 
@@ -37,27 +37,11 @@ Ever since Moggi introduced monads in his computational lambda calculus, there h
 My work involves pushing back on the assumptions that are made in these models, and in applying those models to understand issues in programming languages.
 My most recent work involves relaxing the assumptions about the structure of the language that these models are built on.
 
-- Semantics for Authorization Logics
-
-Authorization logics are used to describe and prove properties of authorization policies.
-We give a new semantics for authorization logics, based on the informal notion of semantics for the Nexus Authorization Logic (NAL).
-We show that this semantics is equivalent to the more traditional Kripke semantics.
-This work was published in Computer and Communications Security 2013 in Berlin, Germany.
-
-- Domain Specific Language for Composite
-
-Composite is a component-based operating system developed at The George Washington University.
-I developed a domain specific language for specifing communication between components.
-The language automatically inserted dynamic checks to ensure that communication happened correctly.
-This served as my Capstone Design project for my Bachelor's of Science degree.
-
-- Turing Categories for Computability Theorists
-
-Turing categories are a definition of computability in category theory.
-I discuss Turing categories, and note their use in proving theories in computability theory.
-This served as an Honor's thesis for my Bachelor's of Science degree.
-
 ## Teaching Experience
+
+- Advanced Programming Languages, Spring 2019
+
+Graduate Teaching Assistant, Cornell University
 
 - Category Theory for Computer Scientists, Spring 2018
 
@@ -112,6 +96,9 @@ Undergraduate Teaching Assistant, The George Washington University
 
 ## Writing and Talks
 
+- First-Order Logic for Flow-Limited Authorization, Talk given at Foundations of Computer Security Workshop (Unpublished), 2019
+http://homepages.cs.ncl.ac.uk/charles.morisset/fcs2019
+
 - Strict and Lazy Semantics for Effects, ACM International Conference on Functional Programming, 2018
 https://dl.acm.org/citation.cfm?doid=3243631.3236783
 http://www.cs.cornell.edu/~akhirsch/pubs/strict_and_lazy_semantics_for_effects.html
@@ -126,8 +113,9 @@ http://arxiv.org/abs/1211.3700
 
 ## Service
 
+- Eastern Great Lakes Programming Languages and Systems Symposium Chair, 2019
+- Theory of Programming Languages Seminar Czar, 2014 -- 2018
 - Computer Science Graduate Organization President, 2015 -- 2016
-- Theory of Programming Languages Seminar Czar, 2014 -- Present
 - Programming Languages Discussion Group Czar, 2013 -- 2015
 - Belle Sherman Elementary After School Program Volunter, 2014
 - President, GWU ACM, 2011 -- 2013
