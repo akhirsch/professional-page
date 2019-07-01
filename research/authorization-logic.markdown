@@ -12,10 +12,16 @@ This allows for delegation among principals in a system.
 
 My work in authorization logics is listed below:
 
-- [Nexus Authorization Logic (NAL): Logical Results](/pubs/nal_logical_results.html)
-With Michael Clarkson.
-Published as a George Washington Unviersity Technical Report, 2012.
+- [First-Order Logic for Flow-Limited Authorization](/pubs/first_order_logic_for_flow_limited_authorization.html)
+With Pedro H. Azevedo de Amorim, Ethan Cecchetti, Ross Tate, and Owen Arden
+Published as Cornell University Technical Report, 2019.
+In submission.
 
 - [Belief Semantics of Authorization Logics](/pubs/belief_semantics_authorization_logics.html)
 With Michael Clarkson
 Published in Computer and Communication Security, 2013.
+
+- [Nexus Authorization Logic (NAL): Logical Results](/pubs/nal_logical_results.html)
+With Michael Clarkson.
+Published as a George Washington Unviersity Technical Report, 2012.
+
