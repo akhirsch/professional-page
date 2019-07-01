@@ -1,5 +1,5 @@
 ---
-title: Belief Semantics Authorization Logic
+title: Authorization Logic
 ---
 
 Authorization logics are logics for describing authorization in (distributed) computing systems.
@@ -11,12 +11,6 @@ among principals, where `A speaks for B` if, whenever `A` believes a sentence, s
 This allows for delegation among principals in a system.
 
 My work in authorization logics is listed below:
-
-- [First-Order Logic for Flow-Limited Authorization](/pubs/first_order_logic_for_flow_limited_authorization.html)
-With Pedro H. Azevedo de Amorim, Ethan Cecchetti, Ross Tate, and Owen Arden
-Published as Cornell University Technical Report, 2019.
-In submission.
-
 - [Belief Semantics of Authorization Logics](/pubs/belief_semantics_authorization_logics.html)
 With Michael Clarkson
 Published in Computer and Communication Security, 2013.
