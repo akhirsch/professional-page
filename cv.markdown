@@ -18,7 +18,7 @@ title: Curriculum Vitae
 - Programming Languages
 - Mathematical Logic and Foundations of Mathematics
 - Category Theory
-- Information and Systems Security
+- Foundations of Computer Security
 
 ## Research Projects
 
@@ -118,6 +118,8 @@ http://arxiv.org/abs/1211.3700
 
 ## Service
 
+- POPL PLMW Panelist, 2020
+- POPL Artifact Evaluation Committee, 2020
 - Eastern Great Lakes Programming Languages and Systems Symposium Chair, 2019
 - Theory of Programming Languages Seminar Czar, 2014 -- 2018
 - Computer Science Graduate Organization President, 2015 -- 2016
