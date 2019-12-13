@@ -5,12 +5,12 @@ title: Curriculum Vitae
 # Andrew K. Hirsch
 
 
-<http://www.cs.cornell.edu/~akhirsch>
+<http://people.mpi-sws.org/~akhirsch>
 
-<akhirsch@cs.cornell.edu>
+<akhirsch@mpi-sws.org>
 
 ## Education
-- PhD in Computer Science, Cornell University (Expected), 2019
+- PhD in Computer Science, Cornell University, 2019
 - Master of Science in Computer Science, Cornell University, 2016
 - Bachelors of Science in Computer Science and Pure Mathematics, The George Washington University, 2013
 
@@ -71,6 +71,9 @@ Undergraduate Teaching Assistant, The George Washington University
 
 Undergraduate Teaching Assistant, The George Washington University
 
+## Current Position
+Postdoctoral Researcher in Computer Security Foundations, Max Planck Institute for Software Systems
+
 ## Past Positions
 
 - Intern, GrammaTech, 2016
@@ -95,6 +98,8 @@ Undergraduate Teaching Assistant, The George Washington University
     - Did laptop repairs on Dell and Apple laptops
 
 ## Writing and Talks
+
+- First-Order Logic for Flow-Limited Authorizat, IEEE Symposium on Computer Security Foundations, 2020
 
 - First-Order Logic for Flow-Limited Authorization, Talk given at Foundations of Computer Security Workshop (Unpublished), 2019
 http://homepages.cs.ncl.ac.uk/charles.morisset/fcs2019
