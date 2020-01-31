@@ -11,8 +11,13 @@ among principals, where `A speaks for B` if, whenever `A` believes a sentence, s
 This allows for delegation among principals in a system.
 
 My work in authorization logics is listed below:
+
+- [First-Order Logic for Flow-Limited Authorization](/pubs/first_order_logic_for_flow_limited_authorization.html)
+with Pedro H. Azevedo de Amorim, Ethan Cecchetti, Ross Tate, and Owen Arden.
+Published in Computer Security Foundations, 2020.
+
 - [Belief Semantics of Authorization Logics](/pubs/belief_semantics_authorization_logics.html)
-With Michael Clarkson
+With Michael Clarkson.
 Published in Computer and Communication Security, 2013.
 
 - [Nexus Authorization Logic (NAL): Logical Results](/pubs/nal_logical_results.html)

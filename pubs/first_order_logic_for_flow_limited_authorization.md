@@ -11,3 +11,5 @@ Abstract: We present the Flow-Limited Authorization First-Order Logic (FLAFOL), 
 
 Releases: 
 - [Tech Report (PDF)](/publications/first_order_logic_for_flow_limited_authorization_tr.pdf)
+- [Tech Report (ArXiv)](https://arxiv.org/abs/2001.10630)
+
