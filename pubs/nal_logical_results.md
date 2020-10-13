@@ -5,6 +5,7 @@ publishedin: The George Washington University Technical Report
 location: N/A
 year: 2012
 publisher: The George Washington University
+published: 2012-11-16
 ---
 
 Abstract: Nexus Authorization Logic (NAL) [Schneider et al. 2011] is a logic for reasoning about authorization in distributed systems. 

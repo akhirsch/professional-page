@@ -20,22 +20,24 @@ title: Curriculum Vitae
 - Category Theory
 - Foundations of Computer Security
 
-## Research Projects
+<!-- ## Research Projects -->
 
-- Flow-Limited Authorization Logics
+<!-- -  -->
 
-Authorization logics are often used to describe correctness for authorizaiton mechanisms in distributed systems. 
-They allow flexibility in defining authorization policies and proof-theoretic tools for providing security guarantees. 
-However, these logics generally do not reflect the fact that often authorization decisions are based on private or low-integrity data. 
-We (Hirsch, Cecchetti, Arden, and Tate) are developing FLAFOL, the Flow-Limited Authorization First-Order Logic, which is an authorization logic with information flow labels. 
-FLAFOL describes the correctness of authorization mechanisms which respect information flow policies. FLAFOL also provides unique security guarantees: not only do the standard notions of non-interference for authorization logic and information flow labels hold, but we can show that the action of a correct authorization mechanism (with reference to FLAFOL) cannot leak private information, as determined by the labels.
+<!-- - Flow-Limited Authorization Logics -->
 
-- Categorical Semantics for Type-And-Effect Systems
+<!-- Authorization logics are often used to describe correctness for authorizaiton mechanisms in distributed systems.  -->
+<!-- They allow flexibility in defining authorization policies and proof-theoretic tools for providing security guarantees.  -->
+<!-- However, these logics generally do not reflect the fact that often authorization decisions are based on private or low-integrity data.  -->
+<!-- We (Hirsch, Cecchetti, Arden, and Tate) are developing FLAFOL, the Flow-Limited Authorization First-Order Logic, which is an authorization logic with information flow labels.  -->
+<!-- FLAFOL describes the correctness of authorization mechanisms which respect information flow policies. FLAFOL also provides unique security guarantees: not only do the standard notions of non-interference for authorization logic and information flow labels hold, but we can show that the action of a correct authorization mechanism (with reference to FLAFOL) cannot leak private information, as determined by the labels. -->
 
-Effects are ubiquitous in programming languages.
-Ever since Moggi introduced monads in his computational lambda calculus, there have been generalizations and reformulations of categorical semantics of effect systems.
-My work involves pushing back on the assumptions that are made in these models, and in applying those models to understand issues in programming languages.
-My most recent work involves relaxing the assumptions about the structure of the language that these models are built on.
+<!-- - Categorical Semantics for Type-And-Effect Systems -->
+
+<!-- Effects are ubiquitous in programming languages. -->
+<!-- Ever since Moggi introduced monads in his computational lambda calculus, there have been generalizations and reformulations of categorical semantics of effect systems. -->
+<!-- My work involves pushing back on the assumptions that are made in these models, and in applying those models to understand issues in programming languages. -->
+<!-- In particular, I have been working on  -->
 
 ## Teaching Experience
 
@@ -99,7 +101,13 @@ Postdoctoral Researcher in Computer Security Foundations, Max Planck Institute f
 
 ## Writing and Talks
 
-- First-Order Logic for Flow-Limited Authorizat, IEEE Symposium on Computer Security Foundations, 2020
+- Giving Semantics to Program-Counter Labels via Secure Effects, to appear in ACM Symposium on Principles of Programming Languages, 2021
+
+- Noninterference Half-Off: The Semantics of Program Counter Labels and Effects, Talk given at Foundations of Computer Security Workshop (Unpublished), 2020
+https://owenarden.github.io/fcs2020/paper/Noninterference_Half-Off.pdf
+https://www.youtube.com/watch?v=PNWnD2DTDcI
+
+- First-Order Logic for Flow-Limited Authorization, IEEE Symposium on Computer Security Foundations, 2020
 
 - First-Order Logic for Flow-Limited Authorization, Talk given at Foundations of Computer Security Workshop (Unpublished), 2019
 http://homepages.cs.ncl.ac.uk/charles.morisset/fcs2019

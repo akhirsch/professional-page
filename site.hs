@@ -28,7 +28,7 @@ main = hakyll $ do
     create ["publications.html"] $ do
         route idRoute
         compile $ do
-          pubs <- loadAll "pubs/*"
+          pubs <- loadAll "pubs/*" >>= recentFirst
           let researchCtx = 
                 constField "title" "Publications"                 `mappend`
                 listField "pubs" defaultContext (return pubs)     `mappend`
@@ -85,7 +85,7 @@ main = hakyll $ do
         route idRoute
         compile $ do
             prjcts <- loadAll "research/*"
-            pubs   <- loadAll "pubs/*"
+            pubs   <- loadAll "pubs/*" >>= recentFirst
             let indexCtx = 
                     listField "prjcts" defaultContext (return . take 10 $ prjcts) `mappend`
                     listField "pubs" defaultContext (return . take 10 $ pubs)     `mappend`

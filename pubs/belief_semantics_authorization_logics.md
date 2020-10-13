@@ -4,6 +4,7 @@ author: Andrew K. Hirsch and Michael Clarkson
 publishedin: Computer and Communication Security
 location: Berlin, Germany
 year: 2013
+published: 2013-11-04
 publisher: ACM
 ---
 

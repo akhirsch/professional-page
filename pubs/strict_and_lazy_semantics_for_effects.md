@@ -4,6 +4,7 @@ author: Andrew K. Hirsch and Ross Tate
 publishedin: International Conference on Functional Programming
 location: St. Louis, Missouri, USA
 year: 2018
+published: 2018-09-23
 publisher: ACM
 ---
 
