@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="{% block lang %}en{% endblock %}">
+{%- block init -%}
+  {%- set title = config.title -%}
+  {%- set author = config.author -%}
+  {%- set description = config.description -%}
+  {%- set permalink = "" -%}
+{%- endblock -%}
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>{{ title }}</title>
+  <meta name=author content="{{ author }}">
+  {% if description -%}
+  <meta name=description content="{{ description }}" />
+  {%- endif %}
+  <meta name="robots" content="max-image-preview:large" />
+  <link rel=canonical href="{{ permalink | safe }}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ permalink | safe }}">
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta property="og:title" content="{{ title }}">
+  {% if description -%}
+  <meta property="og:description" content="{{ description }}">
+  {% endif -%}
+  <meta name=twitter:card content="summary">
+  <meta name=twitter:title content="{{ title }}">
+  {% if description -%}
+  <meta name=twitter:description content="{{ description }}">
+  {% endif -%}
+
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ get_url(path='apple-touch-icon.png') }}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ get_url(path='favicon-32x32.png') }}" />
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ get_url(path='favicon-16x16.png') }}" />
+  <link rel="manifest" href="{{ get_url(path='site.webmanifest') }}" />
+  <link rel="icon" sizes="16x16" href="{{ get_url(path='favicon.ico') }}" />
+  <link rel=alternate type=application/rss+xml href="{{ get_url(path='index.xml') }}" title={{ config.title }}/>
+  <link rel="stylesheet" href="{{ get_url(path='main.css') }}"/>
+  {%- if config.extra.googleVerification %}
+  <meta name="google-site-verification" content="{{ config.extra.googleVerification }}" />
+  {%- endif %}
+  {%- block custom_meta %}{% endblock %}
+</head>
+
+<body>
+  <header>
+    <a class="header__verification" href="{{ get_url(path='/') }}">{{ config.title }}</a>
+    <p class="header__official">Official</p>
+    {%- if config.extra.nav %}
+    <nav>
+      <ul>
+      {%- for item in config.extra.nav %}
+        <li>
+        {%- if item.url is matching("https?://") %}
+          <a href="{{ item.url | safe }}">{{ item.name }}</a>
+        {%- else %}
+          {%- set item_url = get_url(path=item.url) %}
+          {%- if current_url and item_url == current_url %}
+          {{ item.name }}
+          {%- else %}
+          <a href="{{ item_url | safe }}">{{ item.name }}</a>
+          {% endif %}
+        {%- endif %}
+        </li>
+      {%- endfor %}
+      </ul>
+    </nav>
+    {%- endif %}
+  </header>
+  <main>
+    {% block main %}{% endblock %}
+  </main>
+  <footer>
+    {%- block footer -%}
+    {%- if config.extra.zola_version -%}
+      {%- set generator = "zola " ~ config.extra.zola_version -%}
+    {%- else -%}
+      {%- set generator = "zola " ~ get_env(name="ZOLA_VERSION", default="0.20.0") -%}
+    {%- endif %}
+    <p>
+      Powered by <a target="_blank" rel="noopener" href="https://www.getzola.org">{{ generator }}</a>
+      | Theme <a target=_blank rel=noopener href=https://github.com/inhzus/zola-futu>futu@main</a>
+    </p>
+    {%- endblock %}
+  </footer>
+  {% block script -%}
+  {%- if config.extra.googleAnalytics -%}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.extra.googleAnalytics }}"></script>
+  <script>
+    var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+    var doNotTrack = (dnt == "1" || dnt == "yes");
+    if (!doNotTrack) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ config.extra.googleAnalytics }}');
+    }
+  </script>
+  {%- endif -%}
+  {%- if config.extra.microsoftClarity -%}
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "{{ config.extra.microsoftClarity }}");
+  </script>
+  {%- endif -%}
+  {%- endblock script %}
+</body>
+</html>

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{%- block init -%}
+  {{- super() -}}
+  {%- set title = section.title ~ " | " ~ config.title -%}
+  {%- set permalink = section.permalink -%}
+{%- endblock -%}
+
+{% block custom_meta %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@idotj/mastodon-embed-timeline@4.6.0/dist/mastodon-timeline.min.css" integrity="sha256-Qi3H+bdH6RuMuyR1trAlG5bMWJGl9y3jPiTc1PWQFpI=" crossorigin="anonymous">
+{%- endblock %}
+
+{% block main -%}
+    <div id="mt-container" class="mt-container">
+      <div class="mt-body" role="feed">
+        <div class="mt-loading-spinner"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@idotj/mastodon-embed-timeline@4.6.0/dist/mastodon-timeline.umd.js" integrity="sha256-atEPYqs4j5Ogqb9yl3++jbRmTIItqwZUhpnTWdNsF2c=" crossorigin="anonymous"></script>
+    <script>
+      window.addEventListener("load", () => {
+        const myTimeline = new MastodonTimeline.Init({
+          instanceUrl: "{{ config.extra.mastodon.instanceUrl | safe }}",
+          timelineType: "profile",
+          userId: "{{ config.extra.mastodon.userId }}",
+          profileName: "{{ config.extra.mastodon.profileName }}",
+
+          btnSeeMore: "",
+          btnReload: "",
+        });
+      });
+    </script>
+{%- endblock %}
