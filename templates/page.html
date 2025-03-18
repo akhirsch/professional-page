@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block init %}
+  {{ super() }}
+  {%- set title = page.title -%}
+  {%- if page.author -%}
+    {%- set author = page.author -%}
+  {%- endif -%}
+  {%- if page.description -%}
+    {%- set description = page.description -%}
+  {%- else -%}
+    {%- set description = page.content | truncate(length=200) | spaceless | escape_xml -%}
+  {%- endif -%}
+  {%- set permalink = page.permalink -%}
+{% endblock %}
+
+{% block main -%}
+    <article>
+      <header>
+        <h1>{{ title }}</h1>
+        <span>
+          <br><time datetime="{{ page.date }}">{{ page.date | date(format="%b %d, %Y") }}</time>
+        </span>
+      </header>
+      {%- if page.extra.toc and page.toc -%}
+      <details id=TableOfContentsWrapper>
+        <summary>Table of Contents</summary>
+        <nav id=TableOfContents>
+          <ul>
+            {% for h1 in page.toc -%}
+            <li>
+              <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+              {% if h1.children -%}
+              <ul>
+                {% for h2 in h1.children -%}
+                <li>
+                  <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                </li>
+                {%- endfor %}
+              </ul>
+              {%- endif %}
+            </li>
+            {%- endfor %}
+          </ul>
+        </nav>
+      </details>
+      {%- endif -%}
+      {{ page.content | safe }}
+      {%- if config.extra.giscus -%}
+      <script src="https://giscus.app/client.js"
+            data-repo="{{ config.extra.giscus.repo }}"
+            data-repo-id="{{ config.extra.giscus.repoId }}"
+            data-category="{{ config.extra.giscus.category }}"
+            data-category-id="{{ config.extra.giscus.categoryId }}"
+            data-mapping="title"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+      </script>
+      {%- endif -%}
+    </article>
+{%- endblock %}
+
+{% block script -%}
+  {{ super() }}
+  {%- if page.extra.mathjax -%}
+  <script type="text/javascript" defer
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        TeX: { equationNumbers: { autoNumber: "AMS" },
+             extensions: ["AMSmath.js", "AMSsymbols.js"] }
+      }
+      });
+      MathJax.Hub.Queue(function() {
+        // Fix <code> tags after MathJax finishes running. This is a
+        // hack to overcome a shortcoming of Markdown. Discussion at
+        // https://github.com/mojombo/jekyll/issues/199
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i = 0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+      MathJax.Hub.Config({
+      // Autonumbering by mathjax
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
+  </script>
+  {%- endif -%}
+{%- endblock %}

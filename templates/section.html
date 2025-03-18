@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{%- block init -%}
+  {{- super() -}}
+  {%- set title = section.title ~ " | " ~ config.title -%}
+  {%- set permalink = section.permalink -%}
+{%- endblock init -%}
+
+{% block main %}
+    <article>
+      <header>
+        <h1>{{ section.title }}</h1>
+      </header>
+      {{ section.content | safe }}
+    </article>
+{% endblock %}
