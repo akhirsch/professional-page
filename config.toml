@@ -1,11 +1,22 @@
 # The URL the site will be built for
 base_url = "https://akhirsch.science"
 
+title = "Andrew K. Hirsch"
+
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
+
+# The site them to use.
+theme = "futu"
+
+taxonomies = [
+	   {name = "area", feed = true},
+	   {name = "awards", feed=true},
+	   {name = "projectids", feed=true}
+]
 
 [markdown]
 # Whether to do syntax highlighting
@@ -14,3 +25,9 @@ highlight_code = true
 
 [extra]
 # Put all your custom variables here
+nav = [
+{name="Home", url=""},
+{name="Blog", url="posts"},
+{name="Research", url="papers"},
+{name="Projects", url="projects"}
+]

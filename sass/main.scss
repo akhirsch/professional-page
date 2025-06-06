@@ -1,0 +1,28 @@
+@import "../themes/futu/sass/main.scss";
+
+img.profilepic {
+    float:left;
+    padding-right : 30px;
+}
+
+div.students{
+    display:flex;
+}
+
+div.student_list{
+    width: 33%;
+}
+
+div.alum_list{
+    width:100%;
+    columns:2;
+    margin: auto;
+    display:grid;
+}
+div.alum{
+    padding-bottom: 30px;
+}
+
+h3.student_title{
+    text-align: center;
+}

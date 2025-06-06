@@ -1,0 +1,140 @@
+{% extends "section.html" %}
+
+{%- block init -%}
+  {{- super() -}}
+{%- endblock init -%}
+
+{%- block main %}
+<article>
+  <header>
+    <h1>{{ section.title }}</h1>
+  </header>
+  {{ section.content | safe }}
+
+  <h1>Papers by Area</h1>
+    <h2>Concurrency (Session Types and Choreographies)</h2>
+  <ul class="paperlist">
+  {% set sorted_pages = section.pages | sort(attribute="date") %}
+  {% for page in sorted_pages | reverse %}
+  {% if page.taxonomies.area and page.taxonomies.area is containing("Concurrency") %}
+  <li>
+    <div class="papersmall">
+      <div class="papertitle">
+	<b><a href={{page.permalink | safe}}>{{page.title}}</a></b>
+      </div>
+      <div class="authors">
+	{% if page.extra.paperauthors | length == 1 %}
+	By {{page.extra.paperauthors | first | safe}}
+	{% elif page.extra.paperauthors | length == 2 %}
+	By {{page.extra.paperauthors | first | safe}} and {{page.extra.paperauthors | last | safe }}
+	{% else %}
+	By {{page.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{page.extra.paperauthors | last | safe}}
+	{% endif %}
+      </div>
+      Published in {{page.extra.publishedin}}.
+    </div>
+  </li>
+  {% endif %}
+  {% endfor %}
+  </ul>
+    <h2>Information-Flow Control</h2>
+  <ul class="paperlist">
+  {% set sorted_pages = section.pages | sort(attribute="date") %}
+  {% for page in sorted_pages | reverse %}
+  {% if page.taxonomies.area and page.taxonomies.area is containing("IFC") %}
+  <li>
+    <div class="papersmall">
+      <div class="papertitle">
+	<b><a href={{page.permalink | safe}}>{{page.title}}</a></b>
+      </div>
+      <div class="authors">
+	{% if page.extra.paperauthors | length == 1 %}
+	By {{page.extra.paperauthors | first | safe}}
+	{% elif page.extra.paperauthors | length == 2 %}
+	By {{page.extra.paperauthors | first | safe}} and {{page.extra.paperauthors | last | safe }}
+	{% else %}
+	By {{page.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{page.extra.paperauthors | last | safe}}
+	{% endif %}
+      </div>
+      Published in {{page.extra.publishedin}}.
+    </div>
+  </li>
+  {% endif %}
+  {% endfor %}
+  </ul>
+  <h2> Authorization Logic </h2>
+  <ul class="paperlist">
+  {% set sorted_pages = section.pages | sort(attribute="date") %}
+  {% for page in sorted_pages | reverse %}
+  {% if page.taxonomies.area and page.taxonomies.area is containing("Authorization Logic") %}
+  <li>
+    <div class="papersmall">
+      <div class="papertitle">
+	<b><a href={{page.permalink | safe}}>{{page.title}}</a></b>
+      </div>
+      <div class="authors">
+	{% if page.extra.paperauthors | length == 1 %}
+	By {{page.extra.paperauthors | first | safe}}
+	{% elif page.extra.paperauthors | length == 2 %}
+	By {{page.extra.paperauthors | first | safe}} and {{page.extra.paperauthors | last | safe }}
+	{% else %}
+	By {{page.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{page.extra.paperauthors | last | safe}}
+	{% endif %}
+      </div>
+      Published in {{page.extra.publishedin}}.
+    </div>
+  </li>
+  {% endif %}
+  {% endfor %}
+  </ul>
+  <h2>Computational Effects</h2>
+  <ul class="paperlist">
+  {% set sorted_pages = section.pages | sort(attribute="date") %}
+  {% for page in sorted_pages | reverse %}
+  {% if page.taxonomies.area and page.taxonomies.area is containing("Effects") %}
+  <li>
+    <div class="papersmall">
+      <div class="papertitle">
+	<b><a href={{page.permalink | safe}}>{{page.title}}</a></b>
+      </div>
+      <div class="authors">
+	{% if page.extra.paperauthors | length == 1 %}
+	By {{page.extra.paperauthors | first | safe}}
+	{% elif page.extra.paperauthors | length == 2 %}
+	By {{page.extra.paperauthors | first | safe}} and {{page.extra.paperauthors | last | safe }}
+	{% else %}
+	By {{page.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{page.extra.paperauthors | last | safe}}
+	{% endif %}
+      </div>
+      Published in {{page.extra.publishedin}}.
+    </div>
+  </li>
+  {% endif %}
+  {% endfor %}
+  </ul>
+  <h1>Papers by Date</h1>
+  <ul class="paperlist">
+  {% for page in sorted_pages | reverse %}
+  <li>
+    <div class="papersmall">
+      <div class="papertitle">
+	<b><a href={{page.permalink | safe}}>{{page.title}}</a></b>
+      </div>
+      <div class="authors">
+	{% if page.extra.paperauthors | length == 1 %}
+	By {{page.extra.paperauthors | first | safe}}
+	{% elif page.extra.paperauthors | length == 2 %}
+	By {{page.extra.paperauthors | first | safe}} and {{page.extra.paperauthors | last | safe }}
+	{% else %}
+	By {{page.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{page.extra.paperauthors | last | safe}}
+	{% endif %}
+      </div>
+      Published in {{page.extra.publishedin}}.
+    </div>
+  </li>
+  {% endfor %}
+  </ul>
+</article>
+
+{%- endblock %}
+

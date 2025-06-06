@@ -1,0 +1,135 @@
+{% extends "futu/templates/index.html" %}
+{%- block main -%}
+<article class="home-section">
+  {% set profilepic = resize_image(path="tower_of_london.jpg", width=500, op="fit_width") %}
+  <img class="profilepic" src="{{ profilepic.url }}">
+  <p>I am Andrew K. Hirsch, an Assistant Professor in the Department of Computer Science and Engineering at the University at Buffalo, SUNY. My research is on programming languages for decentralized systems. My focus is on choreographic programming, a programming paradigm for message-passing concurrency. I also work on information-flow security, and on other, related, ideas. </p>
+
+  <p>Before I came to Buffalo, I was a postdoc at the Max Planck Institute for Software Systems (MPI-SWS) in Saarbrücken, Germany. I worked with Deepak Garg in the Foundations of Security group. I earned my Ph.D. in 2019 from Cornell University in Ithaca, NY, USA. There, I worked with Ross Tate on programming-language foundations, focusing on the theory of computational effects. Before that, I attended The George Washington University in Washington, DC, where I earned a Bachelor’s of Science degree in Computer Science and Pure Mathematics.</p>
+  
+  <h2>News</h2>
+  {%- set posts_section = get_section(path="posts/_index.md") %}
+  <ul class="pages-list">
+    {%- for post in posts_section.pages | sort(attribute="date") | reverse | slice(end=5) %}
+    <li>
+      <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
+      <small><time datetime="{{ post.date }}">{{ post.date | date(format="%b %d, %Y") }}</time></small>
+    </li>
+    {%- endfor %}
+    <li><a href="{{ posts_section.permalink | safe }}">View All →</a></li>
+  </ul>
+  <h2>Students</h2>
+  <div class="students">
+    <div class="student_list">
+      <h3 class="student_title">Doctoral </h3>
+      <ul>
+	{% set phd_students = load_data(path="content/students/phd.json", format="json") %}
+	{% for student in phd_students | sort(attribute="date_joined") %}
+	<li>
+	  {% if student.website %}
+	  <a href="{{student.website | safe}}"><b>{{student.name}}</b></a>
+	  {% else %}
+	  <b>{{student.name}}</b>
+	  {% endif %}
+	</li>
+	{% endfor %}
+      </ul>
+    </div>
+    <div class="student_list">
+      <h3 class="student_title">Masters</h3>
+      {% set ms_students = load_data(path="content/students/ms.json", format="json") %}
+      {% for student in ms_students | sort(attribute="date_joined") %}
+      <li>
+	{% if student.website %}
+	<a href="{{student.website | safe}}"><b>{{student.name}}</b></a>
+	{% else %}
+	<b>{{student.name}}</b>
+	{% endif %}
+      </li>
+      {% endfor %}
+    </div>
+    <div class="student_list">
+      <h3>Undergraduate</h3>
+      <ul class="student-list">
+	{% set ug_students = load_data(path="content/students/ug.json", format="json") %}
+	{% for student in ug_students | sort(attribute="date_joined") %}
+	<li>
+	  {% if student.website %}
+	  <a href="{{student.website | safe}}"><b>{{student.name}}</b></a>
+	  {% else %}
+	  <b>{{student.name}}</b>
+	  {% endif %}
+	</li>
+	{% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="alumni">
+    <h3 class="student_title">Recent Alumni</h3>
+    <div class="alum_list">
+      {% set alums = load_data(path="content/students/alumni.json", format="json") %}
+      {% for alum in alums | sort(attribute="date_graduated") | reverse | slice(end=5) %}
+      <div class="alum">
+	<div class="alum-name">
+	  {% if alum.website %}
+	  <a href="{{alum.website | safe}}"><b>{{alum.name}}</b></a>
+	  {% else %}
+	  <b>{{alum.name}}</b>
+	  {% endif %}
+	</div>
+	<div class="alum-degree">
+	  {% if alum.degree_conferred %}
+	  Graduated on {{alum.date_graduated}} with a {{alum.degree_conferred}}.
+	  {% endif %}
+	</div>
+	<div class="alum_destination">
+	  {% if alum.where_gone %}
+	  Now at {{alum.where_gone}}.
+	  {% endif %}
+	</div>
+	{% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="projects">
+    <h2>Projects</h2>
+    {% set projects = get_section(path="projects/_index.md") %}
+    You can see all of the projects I have been involved with <a href={{projects.permalink | safe}}>here</a>.
+    <h3>Recent Projects</h3>
+    {% for project in projects.pages | sort(attribute="date") | reverse | slice(end=5)%}
+    <div class="project">
+      <b><a href={{project.permalink | safe}}>{{project.title}}</a></b>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="researchabbrv">
+    <h2>Publications</h2>
+    {% set papers = get_section(path="papers/_index.md") %}
+    Below is a list of my most recent publications.
+    You can view all of my publications <a href={{papers.permalink}}>here</a>.
+    <h3>Recent Publications</h3>
+    <ul class="publist">
+      {% for paper in papers.pages | sort(attribute="date") | reverse | slice(end=5) %}
+      <li>
+	<div class="papersmall">
+	  <div class="papertitle">
+	    <b><a href={{paper.permalink | safe}}>{{paper.title}}</a></b>
+	  </div>
+	  <div class="authors">
+	    {% if paper.extra.paperauthors | length == 1 %}
+	    By {{paper.extra.paperauthors | first | safe}}
+	    {% elif paper.extra.paperauthors | length == 2 %}
+	    By {{paper.extra.paperauthors | first | safe}} and {{paper.extra.paperauthors | last | safe }}
+	    {% else %}
+	    By {{paper.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{paper.extra.paperauthors | last | safe}}
+	    {% endif %}
+	  </div>
+	  Published in {{paper.extra.publishedin}}.
+	</div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {{ section.content | safe}}
+</article>
+{%- endblock %}

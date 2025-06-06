@@ -1,0 +1,57 @@
+[
+    {
+	"name": "Frank (Feng-Mao) Tsai",
+	"date_joined": "2022-09-01",
+	"date_graduated": "2024-09-01",
+	"degree_conferred": "MS",
+	"where_gone": "University of Gothenberg (as an MSc student in Math)",
+	"website": "https://frankndrssn.github.io/"
+    },
+    {
+	"name": "Rounak Biswas",
+	"date_joined": "2023-09-01",
+	"date_graduated": "2024-06-01",
+	"degree_conferred": "MS"
+    },
+    {
+	"name": "Vamsi Krishna Bellam",
+	"date_joined": "2025-01-01",
+	"date_graduated": "2025-06-01",
+	"degree_conferred": "MS",
+	"website": "https://vamsibellam.com/"
+    },
+    {
+	"name": "Prashant Godhwani",
+	"date_joined": "2023-01-01",
+	"date_graduated": "2024-01-01",
+	"degree_conferred":"MS",
+	"website": "https://www.linkedin.com/in/prashant-godhwani/",
+	"where_gone": "Morgan Stanley"
+    },
+    {
+	"name": "Shruti Gupta",
+	"date_joined": "2023-01-01",
+	"date_graduated": "2024-01-01",
+	"degree_conferred": "MS",
+	"website": "https://www.linkedin.com/in/shrutigupta55/"
+    },
+    {
+	"name": "Tiffany Cai",
+	"date_joined": "2024-01-01",
+	"date_graduated": "2025-06-01",
+	"degree_conferred": "BS"
+    },
+    {
+	"name": "Vincent Chan",
+	"date_joined": "2024-01-01",
+	"date_graduated": "2025-01-01",
+	"degree_conferred": "BS",
+	"where_gone": "University at Buffalo, SUNY (as a Ph.D. student in Qianchuan Ye's group)",
+	"website": "https://1zumisagiri.github.io/"
+    },
+    {
+	"name": "Ethan Canton",
+	"date_joined": "2024-01-01",
+	"date_graduated": "2025-06-01"
+    }
+]

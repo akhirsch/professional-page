@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block init %}
+  {{ super() }}
+  {%- set title = page.title -%}
+  {%- if page.author -%}
+    {%- set author = page.author -%}
+  {%- endif -%}
+  {%- if page.description -%}
+    {%- set description = page.description -%}
+  {%- else -%}
+    {%- set description = page.content | truncate(length=200) | spaceless | escape_xml -%}
+  {%- endif -%}
+  {%- set permalink = page.permalink -%}
+{% endblock %}
+
+{%- block main -%}
+
+<h1>{{page.title}}</h1>
+
+<div class="authors">
+  {% if page.extra.paperauthors | length == 1 %}
+  By {{page.extra.paperauthors | first | safe}}
+  {% elif page.extra.paperauthors | length == 2 %}
+  By {{page.extra.paperauthors | first | safe}} and {{page.extra.paperauthors | last | safe }}
+  {% else %}
+  By {{page.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{page.extra.paperauthors | last | safe}}
+  {% endif %}
+</div>
+
+<h2>Abstract</h2>
+<div class="abstract">
+  {{page.extra.abstract | safe}}
+</div>
+
+{{page.content | safe}}
+
+{%- endblock %}
+
+{% block script -%}
+  {{ super() }}
+  <script type="text/javascript" defer
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        TeX: { equationNumbers: { autoNumber: "AMS" },
+             extensions: ["AMSmath.js", "AMSsymbols.js"] }
+      }
+      });
+      MathJax.Hub.Queue(function() {
+        // Fix <code> tags after MathJax finishes running. This is a
+        // hack to overcome a shortcoming of Markdown. Discussion at
+        // https://github.com/mojombo/jekyll/issues/199
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i = 0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+      MathJax.Hub.Config({
+      // Autonumbering by mathjax
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
+  </script>
+{%- endblock %}

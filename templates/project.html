@@ -1,0 +1,66 @@
+{% extends "page.html" %}
+
+{%- block main -%}
+
+<h1>{{page.title}}</h1>
+
+{{page.content | safe}}
+
+{% set papers = get_section(path="papers/_index.md") %}
+<h2>Publications</h2>
+The following publications are part of this project:
+    <ul class="publist">
+      {% for paper in papers.pages | sort(attribute="date") | reverse %}
+      {% if paper.extra.projects and paper.extra.projects is containing(page.extra.key) %}
+      <li>
+	<div class="papersmall">
+	  <div class="papertitle">
+	    <b><a href={{paper.permalink | safe}}>{{paper.title}}</a></b>
+	  </di>vt
+	  <div class="authors">
+	    {% if paper.extra.paperauthors | length == 1 %}
+	    By {{paper.extra.paperauthors | first | safe}}
+	    {% elif paper.extra.paperauthors | length == 2 %}
+	    By {{paper.extra.paperauthors | first | safe}} and {{paper.extra.paperauthors | last | safe }}
+	    {% else %}
+	    By {{paper.extra.paperauthors | slice(end=-1) | join(sep=", ") | safe}}, and {{paper.extra.paperauthors | last | safe}}
+	    {% endif %}
+	  </div>
+	  Published in {{paper.extra.publishedin}}.
+	</div>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+{% endblock main %}
+
+{% block script -%}
+  {{ super() }}
+  <script type="text/javascript" defer
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        TeX: { equationNumbers: { autoNumber: "AMS" },
+             extensions: ["AMSmath.js", "AMSsymbols.js"] }
+      }
+      });
+      MathJax.Hub.Queue(function() {
+        // Fix <code> tags after MathJax finishes running. This is a
+        // hack to overcome a shortcoming of Markdown. Discussion at
+        // https://github.com/mojombo/jekyll/issues/199
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i = 0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+      MathJax.Hub.Config({
+      // Autonumbering by mathjax
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
+  </script>
+{%- endblock %}
