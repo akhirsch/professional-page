@@ -3,9 +3,18 @@
 <article class="home-section">
   {% set profilepic = resize_image(path="tower_of_london.jpg", width=500, op="fit_width") %}
   <img class="profilepic" src="{{ profilepic.url }}">
-  <p>I am Andrew K. Hirsch, an Assistant Professor in the Department of Computer Science and Engineering at the University at Buffalo, SUNY. My research is on programming languages for decentralized systems. My focus is on choreographic programming, a programming paradigm for message-passing concurrency. I also work on information-flow security, and on other, related, ideas. </p>
+  <p>I am Andrew K. Hirsch, an Assistant Professor in the <a href="https://cse.buffalo.edu/">Department of Computer Science and Engineering</a> at the <a href="https://www.buffalo.edu">University at Buffalo, SUNY</a>.
+    There, I help lead the <a href="https://cse.buffalo.edu/dbpl/">Databases and Programming Languages</a> group.
+    My research is on programming languages for decentralized systems.
+    My focus is on choreographic programming, a programming paradigm for message-passing concurrency.
+    I also work on information-flow security, and on other, related, ideas. </p>
 
-  <p>Before I came to Buffalo, I was a postdoc at the Max Planck Institute for Software Systems (MPI-SWS) in Saarbrücken, Germany. I worked with Deepak Garg in the Foundations of Security group. I earned my Ph.D. in 2019 from Cornell University in Ithaca, NY, USA. There, I worked with Ross Tate on programming-language foundations, focusing on the theory of computational effects. Before that, I attended The George Washington University in Washington, DC, where I earned a Bachelor’s of Science degree in Computer Science and Pure Mathematics.</p>
+  <p>
+    Before I came to Buffalo, I was a postdoc at the <a href="https://mpi-sws.org/">Max Planck Institute for Software Systems (MPI-SWS)</a> in Saarbrücken, Germany.
+    I worked with <a href="https://people.mpi-sws.org/~dg/">Deepak Garg</a> in the Foundations of Security group.
+    I earned my Ph.D. in 2019 from Cornell University in Ithaca, NY, USA.
+    There, I worked with <a href="https://rosstate.org/">Ross Tate</a> on programming-language foundations, focusing on the theory of computational effects.
+    Before that, I attended The George Washington University in Washington, DC, where I earned a Bachelor’s of Science degree in Computer Science and Pure Mathematics.</p>
   
   <h2>News</h2>
   {%- set posts_section = get_section(path="posts/_index.md") %}
