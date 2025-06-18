@@ -1,5 +1,5 @@
 +++
-title = "Choreographic Quick Changees: First-Class Location (Set) Polymorphism"
+title = "Choreographic Quick Changes: First-Class Location (Set) Polymorphism"
 authors = ["Andrew K. Hirsch"]
 date= 2025-06-18
 [taxonomies]
