@@ -5,7 +5,7 @@ date= 2025-05-27
 [taxonomies]
 area=["Concurrency"]
 awards=[]
-projectids=["Choret"]
+projects=["choret"]
 [extra]
 publishedin="PLACES 2025"
 paperauthors=["<i>Alexander Bohosian</i>", "<b>Andrew K. Hirsch</b>"]

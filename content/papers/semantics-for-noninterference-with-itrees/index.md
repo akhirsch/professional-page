@@ -5,7 +5,7 @@ date= 2023-07-11
 [taxonomies]
 area=["IFC", "Effects"]
 awards=["Distinguished Paper Award"]
-projectids=[]
+projects=[]
 [extra]
 publishedin="ECOOP 2023"
 paperauthors=["Lucas Silver", "Paul He", "Ethan Cecchetti", "<b>Andrew K. Hirsch</b>", "Steve Zdancewic"]

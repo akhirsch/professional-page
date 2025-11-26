@@ -1,10 +1,14 @@
 [
     {
-	"name" : "Alex Doyoon Kim",
-	"date_joined": "2024-01-01"
-    },
-    {
 	"name": "Julia Montouri",
 	"date_joined": "2025-01-01"
+    },
+    {
+	"name" : "Jacqueline Parke",
+	"date_joined": "2025-09-01"
+    },
+    {
+	"name": "Audvey Taheri",
+	"date_joined": "2025-09-01"
     }
 ]

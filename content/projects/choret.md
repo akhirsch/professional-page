@@ -2,7 +2,7 @@
 title = "Choret"
 date = 2025-06-04
 [extra]
-key = "Choret"
+key = "choret"
 +++
 
 # Abstract

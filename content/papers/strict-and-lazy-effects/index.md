@@ -5,7 +5,7 @@ date=2018-07-30
 [taxonomies]
 area=["Effects"]
 awards=[]
-projectids=[]
+projects=[]
 [extra]
 publishedin="ICFP 2018"
 paperauthors=["<b>Andrew K. Hirsch</b>", "Ross Tate"]

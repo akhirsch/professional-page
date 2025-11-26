@@ -53,5 +53,10 @@
 	"name": "Ethan Canton",
 	"date_joined": "2024-01-01",
 	"date_graduated": "2025-06-01"
+    },
+        {
+	    "name" : "Alex Doyoon Kim",
+	    "date_joined": "2024-01-01",
+	    "date_graduated": "2025-09-01"
     }
 ]

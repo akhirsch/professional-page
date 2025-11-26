@@ -15,7 +15,7 @@ theme = "futu"
 taxonomies = [
 	   {name = "area", feed = true},
 	   {name = "awards", feed=true},
-	   {name = "projectids", feed=true}
+	   {name = "projects", feed=true}
 ]
 
 [markdown]

@@ -5,7 +5,7 @@ date= 2024-01-23
 [taxonomies]
 area=["Concurrency"]
 awards=[]
-projectids=[]
+projects=[]
 [extra]
 publishedin="the Journal of Functional Programming"
 paperauthors=["Eva Graversen", "<b>Andrew K. Hirsch</b>", "Fabrizio Montesi"]
