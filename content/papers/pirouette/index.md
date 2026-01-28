@@ -5,7 +5,7 @@ date= 2022-01-12
 [taxonomies]
 area=["Concurrency"]
 awards=["Distinguished Paper Award"]
-projects=["PirComp"]
+research_projects=["PirComp"]
 [extra]
 publishedin="POPL 2022"
 paperauthors=["<b>Andrew K. Hirsch</b>", "Deepak Garg"]

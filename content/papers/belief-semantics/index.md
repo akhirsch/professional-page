@@ -5,7 +5,7 @@ date=2013-11-04
 [taxonomies]
 area=["Authorization Logic"]
 awards=[]
-projects=[]
+research_projects=[]
 [extra]
 publishedin="CCS 2013"
 paperauthors = ["<b>Andrew K. Hirsch</b>", "Michael R. Clarkson"]

@@ -5,7 +5,7 @@ date= 2021-01-04
 [taxonomies]
 area=["Effects", "IFC"]
 awards=[]
-projects=[]
+research_projects=[]
 [extra]
 publishedin="POPL 2021"
 paperauthors=["<b>Andrew K. Hirsch</b>", "Ethan Cecchetti"]

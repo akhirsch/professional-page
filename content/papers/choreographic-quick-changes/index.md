@@ -5,7 +5,7 @@ date= 2025-06-18
 [taxonomies]
 area=["Concurrency"]
 awards=[]
-projects=[]
+research_projects=[]
 [extra]
 publishedin="OOPSLA 2025"
 paperauthors=["Ashley Samuelson", "<b>Andrew K. Hirsch</b>", "Ethan Cecchetti"]

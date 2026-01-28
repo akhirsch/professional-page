@@ -5,7 +5,7 @@ date= 2023-04-06
 [taxonomies]
 area=["IFC"]
 awards=[]
-projects=[]
+research_projects=[]
 [extra]
 publishedin="OOPSLA 2023"
 paperauthors=["Jan Menz", "<b>Andrew K. Hirsch</b>", "Peixuan Li", "Deepak Garg"]

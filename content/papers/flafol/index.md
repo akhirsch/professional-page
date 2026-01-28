@@ -5,7 +5,7 @@ date=2020-08-04
 [taxonomies]
 area=["Authorization Logic", "IFC"]
 awards=[]
-projects=[]
+research_projects=[]
 [extra]
 publishedin="CSF 2020"
 paperauthors=["<b>Andrew K. Hirsch</b>", "Pedro H. Azevedo de Amorim", "Ethan Cecchetti", "Ross Tate", "Owen Arden"]

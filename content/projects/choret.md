@@ -1,5 +1,5 @@
 +++
-title = "Choret"
+title = "Choret: Choreographies as Macros"
 date = 2025-06-04
 [extra]
 key = "choret"
@@ -8,7 +8,7 @@ key = "choret"
 # Abstract
 
 Choret is an experimental implementation of choreographic programming as a library inside of [Racket](https://racket-lang.org/).
-By using Racket macros, we are able to provide a traditional project-and-merge implementation of choreographies as an embedded DSL.
+By using Racket macros, we are able to provide a traditional project-and-merge implementation of choreographies as an embedded DSL
 
 # Source Code
 

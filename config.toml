@@ -15,13 +15,14 @@ theme = "futu"
 taxonomies = [
 	   {name = "area", feed = true},
 	   {name = "awards", feed=true},
-	   {name = "projects", feed=true}
+	   {name = "research_projects", feed=true}
 ]
 
-[markdown]
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = true
+[markdown.highlighting]
+error_on_missing_language = false
+style = "inline"
+light_theme = "github-light"
+dark_theme = "github-dark"
 
 [extra]
 # Put all your custom variables here
@@ -29,5 +30,6 @@ nav = [
 {name="Home", url=""},
 {name="Blog", url="posts"},
 {name="Research", url="papers"},
-{name="Projects", url="projects"}
+{name="Projects", url="projects"},
+{name="Teaching", url="teaching"}
 ]
